@@ -1,0 +1,14 @@
+Ignore Python's cache files
+pycache/
+
+Ignore virtual environments
+venv/
+*.venv
+
+Ignore the big saved model files
+*.h5
+*.joblib
+
+Ignore the massive dataset folder
+We'll tell people where to download this in the README
+New Plant Diseases Dataset(Augmented)/

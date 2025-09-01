@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Plant Disease Scanner</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc;
+        }
+        .container {
+            max-width: 600px;
+            margin: auto;
+        }
+        .result-card {
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            padding: 2rem;
+            text-align: center;
+        }
+        .upload-area {
+            border: 2px dashed #d1d5db;
+            border-radius: 12px;
+            padding: 2rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .upload-area:hover, .upload-area.dragover {
+            background-color: #f0f9ff;
+            border-color: #3b82f6;
+        }
+        .preview-img {
+            max-width: 100%;
+            max-height: 250px;
+            border-radius: 8px;
+            margin-top: 1.5rem;
+        }
+        .loader {
+            border: 4px solid #f3f4f6;
+            border-top: 4px solid #3b82f6;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 2rem auto;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body class="p-8">
+
+    <div class="container">
+        <h1 class="text-4xl font-bold text-center text-gray-800 mb-4">Plant Disease Scanner</h1>
+        <p class="text-center text-gray-600 mb-8">Upload a photo of a plant leaf, and the AI will try to diagnose it.</p>
+
+        <!-- Upload Area -->
+        <div id="uploadArea" class="upload-area text-center">
+            <input type="file" id="fileInput" class="hidden" accept="image/*">
+            <svg class="mx-auto h-12 w-12 text-gray-400" stroke="currentColor" fill="none" viewBox="0 0 48 48" aria-hidden="true">
+                <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+            <p class="mt-2 text-sm text-gray-600">
+                <span class="font-semibold text-blue-600">Click to upload</span> or drag and drop
+            </p>
+            <p class="text-xs text-gray-500">PNG, JPG, GIF up to 10MB</p>
+        </div>
+
+        <!-- Image Preview -->
+        <div id="imagePreviewContainer" class="hidden text-center">
+             <img id="imagePreview" src="#" alt="Image Preview" class="preview-img inline-block"/>
+        </div>
+
+        <!-- Result/Loading Area -->
+        <div id="resultContainer" class="mt-8">
+            <!-- Loader will be inserted here -->
+            <!-- Result card will be inserted here -->
+        </div>
+    </div>
+
+    <script>
+        const uploadArea = document.getElementById('uploadArea');
+        const fileInput = document.getElementById('fileInput');
+        const imagePreviewContainer = document.getElementById('imagePreviewContainer');
+        const imagePreview = document.getElementById('imagePreview');
+        const resultContainer = document.getElementById('resultContainer');
+
+        // --- Event Listeners for Upload ---
+        uploadArea.addEventListener('click', () => fileInput.click());
+        fileInput.addEventListener('change', (event) => {
+            const file = event.target.files[0];
+            if (file) {
+                handleFile(file);
+            }
+        });
+
+        // --- Drag and Drop functionality ---
+        ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+            uploadArea.addEventListener(eventName, preventDefaults, false);
+        });
+
+        function preventDefaults(e) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
+
+        uploadArea.addEventListener('dragenter', () => uploadArea.classList.add('dragover'));
+        uploadArea.addEventListener('dragleave', () => uploadArea.classList.remove('dragover'));
+        uploadArea.addEventListener('drop', (e) => {
+            uploadArea.classList.remove('dragover');
+            const dt = e.dataTransfer;
+            const file = dt.files[0];
+            if (file) {
+                handleFile(file);
+            }
+        });
+
+
+        // --- Main Logic ---
+        function handleFile(file) {
+            // Show image preview
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                imagePreview.src = e.target.result;
+                imagePreviewContainer.classList.remove('hidden');
+            }
+            reader.readAsDataURL(file);
+
+            // Clear previous results and show loader
+            resultContainer.innerHTML = '<div class="loader"></div>';
+            
+            // Send the file to the server
+            uploadAndPredict(file);
+        }
+
+        async function uploadAndPredict(file) {
+            const formData = new FormData();
+            formData.append('file', file);
+
+            // --- IMPORTANT: This URL must match your Flask server ---
+            const apiUrl = 'http://127.0.0.1:5001/predict_disease';
+
+            try {
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                if (!response.ok) {
+                    throw new Error(`Server error: ${response.statusText}`);
+                }
+
+                const data = await response.json();
+                displayResult(data);
+
+            } catch (error) {
+                console.error('Error:', error);
+                displayError('Could not connect to the AI server. Is it running?');
+            }
+        }
+        
+        // --- Display Functions ---
+        function displayResult(data) {
+            if (data.error) {
+                 displayError(data.error);
+                 return;
+            }
+            const confidence = parseFloat(data.confidence);
+            let confidenceColor = 'text-green-600';
+            if (confidence < 75) confidenceColor = 'text-yellow-600';
+            if (confidence < 50) confidenceColor = 'text-red-600';
+
+            const resultHtml = `
+                <div class="result-card">
+                    <h2 class="text-2xl font-bold text-gray-800">${data.disease}</h2>
+                    <p class="mt-2 text-gray-500">AI Diagnosis</p>
+                    <p class="mt-4 text-5xl font-bold ${confidenceColor}">${data.confidence}%</p>
+                    <p class="mt-2 text-gray-500">Confidence</p>
+                </div>
+            `;
+            resultContainer.innerHTML = resultHtml;
+        }
+
+        function displayError(message) {
+             const errorHtml = `
+                <div class="result-card bg-red-50 border border-red-200">
+                    <h2 class="text-xl font-bold text-red-800">An Error Occurred</h2>
+                    <p class="mt-2 text-red-600">${message}</p>
+                </div>
+            `;
+            resultContainer.innerHTML = errorHtml;
+        }
+
+    </script>
+</body>
+</html>
+    
