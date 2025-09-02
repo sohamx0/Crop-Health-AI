@@ -9,6 +9,11 @@ Ignore the big saved model files
 *.h5
 *.joblib
 
-Ignore the massive dataset folder
+--- IGNORE ALL DATASETS ---
 We'll tell people where to download this in the README
+*.csv
 New Plant Diseases Dataset(Augmented)/
+
+--- IGNORE VS CODE JUNK ---
+.vscode/
+tempCodeRunnerFile.py
