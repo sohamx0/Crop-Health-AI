@@ -1,26 +1,11 @@
-# main.py
-
-# Step 1: Install necessary libraries
-# You'll need joblib now: pip install joblib
-# pip install pandas
-# pip install scikit-learn
-
 import pandas as pd
 from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import accuracy_score
 import warnings
-import joblib # New import for saving the model
+import joblib 
 
-# Suppress the UserWarning about feature names
 warnings.filterwarnings("ignore", category=UserWarning)
-
-
-# --- What this script does ---
-# 1. Loads a dataset of soil/weather conditions and the crops that grow well in them.
-# 2. Trains a Machine Learning model (a "Random Forest") to learn the patterns in the data.
-# 3. Saves the trained model to a file so we can use it later without retraining.
-# 4. Uses the trained model to predict the best crop for a new set of conditions.
 
 def train_crop_model():
     """
@@ -90,17 +75,12 @@ def make_prediction(model, feature_names):
     print(f"==> AI Recommended Crop: {predicted_crop_2[0]}")
     print("----------------------\n")
 
-
-# --- Main execution block ---
 if __name__ == "__main__":
     trained_model, feature_names = train_crop_model()
     
     if trained_model:
-        # --- NEW: Save the model ---
         model_filename = 'crop_model.joblib'
         joblib.dump(trained_model, model_filename)
         print(f"Model saved successfully as '{model_filename}'")
-        
-        # You can still run a test prediction if you want
-        make_prediction(trained_model, feature_names)
 
+        make_prediction(trained_model, feature_names)
