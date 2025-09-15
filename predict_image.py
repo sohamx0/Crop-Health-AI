@@ -18,7 +18,7 @@ def predict_plant_disease():
         print("---------------\n")
         return
     
-    image_path = r'C:\Users\Lenovo\EDI\New Plant Diseases Dataset(Augmented)\train\Cherry_(including_sour)___healthy\0a0bd696-c093-47ef-866b-7f5a40af3edb___JR_HL 3952.JPG' # <--- CHANGE THIS FOR NEW IMAGES
+    image_path = r'C:\Users\Lenovo\EDI\New Plant Diseases Dataset(Augmented)\train\Grape___Black_rot\0a06c482-c94a-44d8-a895-be6fe17b8c06___FAM_B.Rot 5019_flipLR.JPG' # <--- CHANGE THIS FOR NEW IMAGES
 
     if 'PASTE_YOUR_IMAGE_PATH_HERE' in image_path or not os.path.exists(image_path):
         print("\n--- ACTION REQUIRED ---")
