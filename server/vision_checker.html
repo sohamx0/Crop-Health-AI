@@ -10,16 +10,19 @@
         body {
             font-family: 'Inter', sans-serif;
             background-color: #f0f4f8;
-            overflow: hidden;
+            /* Changed overflow to only hide horizontal scroll */
+            overflow-x: hidden;
             display: flex;
             align-items: center;
             justify-content: center;
             min-height: 100vh;
+            padding-top: 2rem; /* Add some padding for scroll space */
+            padding-bottom: 2rem;
         }
 
         /* Animated Gradient Background */
         .background {
-            position: absolute;
+            position: fixed; /* Changed to fixed to stay in place */
             top: 0;
             left: 0;
             width: 100%;
@@ -45,6 +48,7 @@
             border: 1px solid rgba(255, 255, 255, 0.3);
             box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
             transition: all 0.3s ease;
+            min-height: 500px; /* Added min-height */
         }
         
         /* Upload Area Styling */
@@ -312,4 +316,3 @@
     </script>
 </body>
 </html>
-
