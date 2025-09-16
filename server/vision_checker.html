@@ -143,7 +143,7 @@
         </div>
 
         <div id="resultContainer" class="mt-8">
-            </div>
+        </div>
     </main>
 
     <script>
@@ -200,49 +200,23 @@
                     <p class="text-indigo-600 font-medium">AI is thinking...</p>
                 </div>`;
             
-            // Send the file to the server (simulated with a delay)
+            // Send the file to the server
             uploadAndPredict(file);
         }
-
-        // --- SIMULATED API CALL ---
-        // Replace this with your actual fetch call
+        
+        // --- THIS IS THE REAL API CALL ---
         async function uploadAndPredict(file) {
-             // Simulate network delay
-            await new Promise(resolve => setTimeout(resolve, 2500)); 
-
-            // --- IMPORTANT: This is where your actual fetch call would go ---
-            // const formData = new FormData();
-            // formData.append('file', file);
-            // const apiUrl = 'http://127.0.0.1:5001/predict_disease';
-            // try {
-            //     const response = await fetch(apiUrl, { method: 'POST', body: formData });
-            //     if (!response.ok) throw new Error(`Server error: ${response.statusText}`);
-            //     const data = await response.json();
-            //     displayResult(data);
-            // } catch (error) {
-            //     console.error('Error:', error);
-            //     displayError('Could not connect to the AI server. Is it running?');
-            // }
-
-
-            // --- MOCK DATA FOR DEMO ---
-             try {
-                // Randomly succeed or fail for demo purposes
-                if (Math.random() > 0.2) { 
-                    const mockDiseases = ["Apple Scab", "Cedar Apple Rust", "Powdery Mildew", "Healthy Leaf"];
-                    const randomDisease = mockDiseases[Math.floor(Math.random() * mockDiseases.length)];
-                    const randomConfidence = (Math.random() * (99 - 45) + 45).toFixed(2);
-                    
-                    const mockData = {
-                        disease: randomDisease,
-                        confidence: randomConfidence,
-                    };
-                    displayResult(mockData);
-                } else {
-                    throw new Error("Failed to analyze image.");
-                }
+            const formData = new FormData();
+            formData.append('file', file);
+            const apiUrl = 'http://127.0.0.1:5001/predict_disease'; // This should match your vision_server.py port
+            try {
+                const response = await fetch(apiUrl, { method: 'POST', body: formData });
+                if (!response.ok) throw new Error(`Server error: ${response.statusText}`);
+                const data = await response.json();
+                displayResult(data);
             } catch (error) {
-                displayError("The AI couldn't identify the leaf. Please try a clearer image.");
+                console.error('Error:', error);
+                displayError('Could not connect to the AI server. Is it running?');
             }
         }
         
@@ -306,7 +280,7 @@
             const confidenceValueEl = document.getElementById('confidence-value');
             let startValue = 0;
             const duration = 1500; // 1.5 seconds
-            const stepTime = Math.abs(Math.floor(duration / confidence));
+            const stepTime = Math.abs(Math.floor(duration / (confidence > 0 ? confidence : 1)));
             const timer = setInterval(() => {
                 startValue += 1;
                 confidenceValueEl.textContent = `${startValue}%`;
@@ -338,3 +312,4 @@
     </script>
 </body>
 </html>
+
