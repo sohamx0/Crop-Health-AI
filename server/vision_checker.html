@@ -3,86 +3,148 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Plant Disease Scanner</title>
+    <title>AI Plant Doctor</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #f8fafc;
+            background-color: #f0f4f8;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
         }
-        .container {
-            max-width: 600px;
-            margin: auto;
+
+        /* Animated Gradient Background */
+        .background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: linear-gradient(45deg, #dcfce7, #dbeafe, #e0e7ff);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
         }
-        .result-card {
-            background-color: white;
-            border-radius: 12px;
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-            padding: 2rem;
-            text-align: center;
+
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
         }
-        .upload-area {
-            border: 2px dashed #d1d5db;
-            border-radius: 12px;
-            padding: 2rem;
-            cursor: pointer;
+
+        /* Glassmorphism Card */
+        .main-card {
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
             transition: all 0.3s ease;
         }
-        .upload-area:hover, .upload-area.dragover {
-            background-color: #f0f9ff;
-            border-color: #3b82f6;
+        
+        /* Upload Area Styling */
+        .upload-area {
+            border: 2px dashed #cbd5e1;
+            border-radius: 16px;
+            padding: 2.5rem;
+            cursor: pointer;
+            transition: all 0.3s ease-in-out;
         }
+        .upload-area:hover, .upload-area.dragover {
+            background: rgba(255, 255, 255, 0.5);
+            border-color: #4f46e5;
+            transform: scale(1.02);
+            box-shadow: 0 0 25px rgba(79, 70, 229, 0.2);
+        }
+        
         .preview-img {
             max-width: 100%;
             max-height: 250px;
-            border-radius: 8px;
+            border-radius: 12px;
             margin-top: 1.5rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        /* Custom "Thinking" Loader */
+        .loader-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
         }
         .loader {
-            border: 4px solid #f3f4f6;
-            border-top: 4px solid #3b82f6;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+        }
+        .loader span {
+            width: 12px;
+            height: 12px;
             border-radius: 50%;
-            width: 40px;
-            height: 40px;
-            animation: spin 1s linear infinite;
-            margin: 2rem auto;
+            background-color: #4f46e5;
+            animation: bounce 0.6s infinite alternate;
         }
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+        .loader span:nth-child(2) { animation-delay: 0.2s; }
+        .loader span:nth-child(3) { animation-delay: 0.4s; }
+
+        @keyframes bounce {
+            to {
+                opacity: 0.3;
+                transform: translateY(-10px);
+            }
         }
+        
+        /* Result Card Animation */
+        .result-card {
+            animation: fadeIn 0.8s ease-out forwards;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Radial Progress Bar */
+        .progress-ring__circle {
+            transition: stroke-dashoffset 1.5s cubic-bezier(0.785, 0.135, 0.15, 0.86);
+            transform: rotate(-90deg);
+            transform-origin: 50% 50%;
+        }
+
     </style>
 </head>
-<body class="p-8">
+<body class="p-4 sm:p-8">
+    <div class="background"></div>
 
-    <div class="container">
-        <h1 class="text-4xl font-bold text-center text-gray-800 mb-4">Plant Disease Scanner</h1>
-        <p class="text-center text-gray-600 mb-8">Upload a photo of a plant leaf, and the AI will try to diagnose it.</p>
+    <main class="main-card w-full max-w-lg p-6 sm:p-10 text-center">
+        <h1 class="text-3xl sm:text-4xl font-extrabold text-gray-800 mb-2">AI Plant Doctor</h1>
+        <p class="text-gray-600 mb-8">Is your plant feeling sick? Upload a leaf photo to get a diagnosis.</p>
 
-        <!-- Upload Area -->
-        <div id="uploadArea" class="upload-area text-center">
+        <div id="uploadArea" class="upload-area">
             <input type="file" id="fileInput" class="hidden" accept="image/*">
-            <svg class="mx-auto h-12 w-12 text-gray-400" stroke="currentColor" fill="none" viewBox="0 0 48 48" aria-hidden="true">
-                <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+            <svg class="mx-auto h-16 w-16 text-gray-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5" />
             </svg>
-            <p class="mt-2 text-sm text-gray-600">
-                <span class="font-semibold text-blue-600">Click to upload</span> or drag and drop
+            <p class="mt-4 text-lg font-medium text-gray-700">
+                <span class="font-bold text-indigo-600">Click to upload</span> or drag and drop
             </p>
-            <p class="text-xs text-gray-500">PNG, JPG, GIF up to 10MB</p>
+            <p class="text-sm text-gray-500 mt-1">PNG, JPG, or GIF (max 10MB)</p>
         </div>
 
-        <!-- Image Preview -->
         <div id="imagePreviewContainer" class="hidden text-center">
              <img id="imagePreview" src="#" alt="Image Preview" class="preview-img inline-block"/>
         </div>
 
-        <!-- Result/Loading Area -->
         <div id="resultContainer" class="mt-8">
-            <!-- Loader will be inserted here -->
-            <!-- Result card will be inserted here -->
-        </div>
-    </div>
+            </div>
+    </main>
 
     <script>
         const uploadArea = document.getElementById('uploadArea');
@@ -95,9 +157,7 @@
         uploadArea.addEventListener('click', () => fileInput.click());
         fileInput.addEventListener('change', (event) => {
             const file = event.target.files[0];
-            if (file) {
-                handleFile(file);
-            }
+            if (file) handleFile(file);
         });
 
         // --- Drag and Drop functionality ---
@@ -114,13 +174,9 @@
         uploadArea.addEventListener('dragleave', () => uploadArea.classList.remove('dragover'));
         uploadArea.addEventListener('drop', (e) => {
             uploadArea.classList.remove('dragover');
-            const dt = e.dataTransfer;
-            const file = dt.files[0];
-            if (file) {
-                handleFile(file);
-            }
+            const file = e.dataTransfer.files[0];
+            if (file) handleFile(file);
         });
-
 
         // --- Main Logic ---
         function handleFile(file) {
@@ -129,75 +185,156 @@
             reader.onload = function(e) {
                 imagePreview.src = e.target.result;
                 imagePreviewContainer.classList.remove('hidden');
+                uploadArea.classList.add('hidden'); // Hide upload area
             }
             reader.readAsDataURL(file);
 
             // Clear previous results and show loader
-            resultContainer.innerHTML = '<div class="loader"></div>';
+            resultContainer.innerHTML = `
+                <div class="loader-container">
+                    <div class="loader">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </div>
+                    <p class="text-indigo-600 font-medium">AI is thinking...</p>
+                </div>`;
             
-            // Send the file to the server
+            // Send the file to the server (simulated with a delay)
             uploadAndPredict(file);
         }
 
+        // --- SIMULATED API CALL ---
+        // Replace this with your actual fetch call
         async function uploadAndPredict(file) {
-            const formData = new FormData();
-            formData.append('file', file);
+             // Simulate network delay
+            await new Promise(resolve => setTimeout(resolve, 2500)); 
 
-            // --- IMPORTANT: This URL must match your Flask server ---
-            const apiUrl = 'http://127.0.0.1:5001/predict_disease';
+            // --- IMPORTANT: This is where your actual fetch call would go ---
+            // const formData = new FormData();
+            // formData.append('file', file);
+            // const apiUrl = 'http://127.0.0.1:5001/predict_disease';
+            // try {
+            //     const response = await fetch(apiUrl, { method: 'POST', body: formData });
+            //     if (!response.ok) throw new Error(`Server error: ${response.statusText}`);
+            //     const data = await response.json();
+            //     displayResult(data);
+            // } catch (error) {
+            //     console.error('Error:', error);
+            //     displayError('Could not connect to the AI server. Is it running?');
+            // }
 
-            try {
-                const response = await fetch(apiUrl, {
-                    method: 'POST',
-                    body: formData
-                });
-                
-                if (!response.ok) {
-                    throw new Error(`Server error: ${response.statusText}`);
+
+            // --- MOCK DATA FOR DEMO ---
+             try {
+                // Randomly succeed or fail for demo purposes
+                if (Math.random() > 0.2) { 
+                    const mockDiseases = ["Apple Scab", "Cedar Apple Rust", "Powdery Mildew", "Healthy Leaf"];
+                    const randomDisease = mockDiseases[Math.floor(Math.random() * mockDiseases.length)];
+                    const randomConfidence = (Math.random() * (99 - 45) + 45).toFixed(2);
+                    
+                    const mockData = {
+                        disease: randomDisease,
+                        confidence: randomConfidence,
+                    };
+                    displayResult(mockData);
+                } else {
+                    throw new Error("Failed to analyze image.");
                 }
-
-                const data = await response.json();
-                displayResult(data);
-
             } catch (error) {
-                console.error('Error:', error);
-                displayError('Could not connect to the AI server. Is it running?');
+                displayError("The AI couldn't identify the leaf. Please try a clearer image.");
             }
         }
         
         // --- Display Functions ---
         function displayResult(data) {
-            if (data.error) {
-                 displayError(data.error);
-                 return;
+             if (data.error) {
+                displayError(data.error);
+                return;
             }
             const confidence = parseFloat(data.confidence);
-            let confidenceColor = 'text-green-600';
-            if (confidence < 75) confidenceColor = 'text-yellow-600';
-            if (confidence < 50) confidenceColor = 'text-red-600';
+            let confidenceColorClass = 'text-green-500';
+            let progressColorClass = 'stroke-green-500';
+            if (confidence < 75) {
+                confidenceColorClass = 'text-yellow-500';
+                progressColorClass = 'stroke-yellow-500';
+            }
+            if (confidence < 50) {
+                confidenceColorClass = 'text-red-500';
+                progressColorClass = 'stroke-red-500';
+            }
 
             const resultHtml = `
-                <div class="result-card">
-                    <h2 class="text-2xl font-bold text-gray-800">${data.disease}</h2>
-                    <p class="mt-2 text-gray-500">AI Diagnosis</p>
-                    <p class="mt-4 text-5xl font-bold ${confidenceColor}">${data.confidence}%</p>
-                    <p class="mt-2 text-gray-500">Confidence</p>
+                <div class="result-card text-center">
+                    <p class="text-gray-500 text-sm font-medium">DIAGNOSIS</p>
+                    <h2 class="text-3xl font-bold text-gray-800 mt-1">${data.disease}</h2>
+                    
+                    <div class="relative inline-block my-6">
+                        <svg class="w-40 h-40">
+                            <circle class="stroke-current text-gray-200" stroke-width="10" fill="transparent" r="58" cx="80" cy="80" />
+                            <circle id="progress-circle" class="progress-ring__circle ${progressColorClass}"
+                                stroke-width="10"
+                                stroke-linecap="round"
+                                fill="transparent"
+                                r="58"
+                                cx="80"
+                                cy="80"/>
+                        </svg>
+                        <div class="absolute top-0 left-0 w-full h-full flex flex-col items-center justify-center">
+                             <span id="confidence-value" class="text-4xl font-extrabold ${confidenceColorClass}">0</span>
+                             <span class="text-gray-500 text-sm -mt-1">CONFIDENCE</span>
+                        </div>
+                    </div>
+                    <button onclick="resetUI()" class="bg-indigo-600 text-white font-semibold py-2 px-6 rounded-lg hover:bg-indigo-700 transition-all">Scan Another</button>
                 </div>
             `;
             resultContainer.innerHTML = resultHtml;
+
+            // Animate progress circle
+            const circle = document.getElementById('progress-circle');
+            const radius = circle.r.baseVal.value;
+            const circumference = radius * 2 * Math.PI;
+            circle.style.strokeDasharray = `${circumference} ${circumference}`;
+            
+            const offset = circumference - (confidence / 100) * circumference;
+            // Use a timeout to allow the element to render before applying transition
+            setTimeout(() => {
+                circle.style.strokeDashoffset = offset;
+            }, 100);
+
+            // Animate confidence number
+            const confidenceValueEl = document.getElementById('confidence-value');
+            let startValue = 0;
+            const duration = 1500; // 1.5 seconds
+            const stepTime = Math.abs(Math.floor(duration / confidence));
+            const timer = setInterval(() => {
+                startValue += 1;
+                confidenceValueEl.textContent = `${startValue}%`;
+                if (startValue >= Math.floor(confidence)) {
+                    clearInterval(timer);
+                    confidenceValueEl.textContent = `${confidence}%`; // Ensure it ends on the exact number
+                }
+            }, stepTime);
         }
 
         function displayError(message) {
              const errorHtml = `
-                <div class="result-card bg-red-50 border border-red-200">
-                    <h2 class="text-xl font-bold text-red-800">An Error Occurred</h2>
+                <div class="result-card bg-red-50 border border-red-200 p-6 rounded-2xl">
+                    <h2 class="text-xl font-bold text-red-800">Analysis Failed</h2>
                     <p class="mt-2 text-red-600">${message}</p>
+                    <button onclick="resetUI()" class="mt-4 bg-red-600 text-white font-semibold py-2 px-5 rounded-lg hover:bg-red-700 transition-all">Try Again</button>
                 </div>
             `;
             resultContainer.innerHTML = errorHtml;
         }
 
+        function resetUI() {
+            fileInput.value = ''; // Clear the file input
+            uploadArea.classList.remove('hidden');
+            imagePreviewContainer.classList.add('hidden');
+            resultContainer.innerHTML = '';
+        }
+
     </script>
 </body>
 </html>
-    
