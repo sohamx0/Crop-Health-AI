@@ -32,7 +32,7 @@ def predict():
         float(data.get('temperature', 0)),
         float(data.get('humidity', 0)),
         float(data.get('ph', 0)),
-        float(data.get('rainfall', 100)) 
+        float(data.get('rainfall', 100))
     ]
     
     input_df = pd.DataFrame([input_data], columns=feature_names)
@@ -47,4 +47,3 @@ def predict():
 if __name__ == '__main__':
     # The server will run on http://127.0.0.1:5000
     app.run(debug=True)
-

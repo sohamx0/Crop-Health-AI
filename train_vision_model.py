@@ -103,4 +103,3 @@ def train_vision_model():
 
 if __name__ == "__main__":
     train_vision_model()
-
