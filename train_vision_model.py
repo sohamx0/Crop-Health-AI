@@ -69,7 +69,6 @@ def train_vision_model():
         Flatten(),
 
         Dense(512, activation='relu'),
-        
         Dropout(0.5),
 
         Dense(num_classes, activation='softmax')
