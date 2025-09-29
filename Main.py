@@ -49,9 +49,6 @@ def train_crop_model():
     return model, features
 
 def make_prediction(model, feature_names):
-    """
-    This function uses the trained model to make a prediction on new, unseen data.
-    """
     if model is None:
         print("Model is not available for prediction.")
         return

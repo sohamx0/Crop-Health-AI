@@ -4,9 +4,6 @@ from tensorflow.keras.preprocessing import image
 import os
 
 def predict_plant_disease():
-    """
-    Loading the trained model and makes a prediction on a single image.
-    """
     model_path = 'plant_disease_model.h5'
     try:
         model = tf.keras.models.load_model(model_path)
