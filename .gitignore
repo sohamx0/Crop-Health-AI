@@ -17,3 +17,6 @@ New Plant Diseases Dataset(Augmented)/
 --- IGNORE VS CODE JUNK ---
 .vscode/
 tempCodeRunnerFile.py
+
+Ignore local asset folders (like library images)
+assets/
