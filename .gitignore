@@ -20,3 +20,6 @@ tempCodeRunnerFile.py
 
 Ignore local asset folders (like library images)
 assets/
+
+
+.env
