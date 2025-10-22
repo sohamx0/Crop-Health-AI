@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Disease Library - CropHealth AI</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .disease-card {
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+        }
+        .disease-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+
+    <header class="bg-white/80 backdrop-blur-md sticky top-0 z-50 shadow-sm">
+        <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <a href="/" class="text-3xl font-bold text-green-600">CropHealth AI</a>
+            <div class="hidden md:flex items-center space-x-8">
+                <a href="/scanner" class="text-gray-600 hover:text-green-600 font-medium">Disease Scanner</a>
+                <a href="/dashboard" class="text-gray-600 hover:text-green-600 font-medium">Smart Dashboard</a>
+            </div>
+            <a href="/" class="bg-green-600 text-white font-bold py-2 px-5 rounded-full hover:bg-green-700 transition duration-300">Home</a>
+        </nav>
+    </header>
+
+    <main class="container mx-auto px-6 py-12">
+        <div class="text-center mb-12">
+            <h1 class="text-5xl font-extrabold text-gray-800">Disease Library</h1>
+            <p class="text-gray-500 mt-3 text-lg max-w-2xl mx-auto">Browse our visual database of 38 plant diseases. Learn to identify them and find expert-backed prevention tips.</p>
+        </div>
+
+        <div class="mb-8 max-w-lg mx-auto">
+            <div class="relative">
+                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                    <svg class="h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd" /></svg>
+                </div>
+                <input id="searchInput" type="text" class="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-full leading-5 bg-white placeholder-gray-500 focus:outline-none focus:placeholder-gray-400 focus:ring-1 focus:ring-green-500 focus:border-green-500 sm:text-sm" placeholder="Search for a disease or crop (e.g., 'Tomato' or 'Blight')">
+            </div>
+        </div>
+
+        <div id="disease-grid" class="grid-container">
+            <!-- Disease cards will be injected here by JavaScript -->
+        </div>
+        <p id="no-results" class="text-center text-gray-500 text-lg mt-12 hidden">No diseases found matching your search.</p>
+    </main>
+
+    <script>
+        const diseases = [
+            'Apple___Apple_scab', 'Apple___Black_rot', 'Apple___Cedar_apple_rust', 'Apple___healthy', 
+            'Blueberry___healthy', 'Cherry_(including_sour)___Powdery_mildew', 'Cherry_(including_sour)___healthy', 
+            'Corn_(maize)___Cercospora_leaf_spot Gray_leaf_spot', 'Corn_(maize)___Common_rust_', 
+            'Corn_(maize)___Northern_Leaf_Blight', 'Corn_(maize)___healthy', 'Grape___Black_rot', 
+            'Grape___Esca_(Black_Measles)', 'Grape___Leaf_blight_(Isariopsis_Leaf_Spot)', 'Grape___healthy', 
+            'Orange___Haunglongbing_(Citrus_greening)', 'Peach___Bacterial_spot', 'Peach___healthy', 
+            'Pepper,_bell___Bacterial_spot', 'Pepper,_bell___healthy', 'Potato___Early_blight', 
+            'Potato___Late_blight', 'Potato___healthy', 'Raspberry___healthy', 'Soybean___healthy', 
+            'Squash___Powdery_mildew', 'Strawberry___Leaf_scorch', 'Strawberry___healthy', 
+            'Tomato___Bacterial_spot', 'Tomato___Early_blight', 'Tomato___Late_blight', 'Tomato___Leaf_Mold', 
+            'Tomato___Septoria_leaf_spot', 'Tomato___Spider_mites Two-spotted_spider_mite', 
+            'Tomato___Target_Spot', 'Tomato___Tomato_Yellow_Leaf_Curl_Virus', 'Tomato___Tomato_mosaic_virus', 
+            'Tomato___healthy'
+        ];
+
+        const diseaseGrid = document.getElementById('disease-grid');
+        const searchInput = document.getElementById('searchInput');
+        const noResults = document.getElementById('no-results');
+
+        function formatDiseaseName(name) {
+            return name.replace(/___/g, ' - ').replace(/_/g, ' ');
+        }
+
+        function createFileName(name) {
+            // This is the new, more robust function
+            return name.toLowerCase()
+                .replace(/___/g, ' ') // Step 1: Replace separator with a space
+                .replace(/_/g, ' ')   // Step 2: Replace underscores with a space
+                .replace(/\s+/g, '-') // Step 3: Replace all spaces (single or multiple) with a single hyphen
+                .replace(/\(|\)/g, '') // Step 4: Remove parentheses
+                .replace(/,-/g, '-'); // Step 5: Clean up any weird artifacts
+        }
+
+        function renderDiseases(filter = '') {
+            diseaseGrid.innerHTML = '';
+            const filteredDiseases = diseases.filter(d => d.toLowerCase().includes(filter.toLowerCase()));
+
+            if (filteredDiseases.length === 0) {
+                noResults.classList.remove('hidden');
+            } else {
+                noResults.classList.add('hidden');
+            }
+
+            filteredDiseases.forEach(disease => {
+                const displayName = formatDiseaseName(disease);
+                const fileName = createFileName(disease);
+                // We assume all images are .jpg, which is a safe bet for photos.
+                const imagePath = `/assets/library_images/${fileName}.jpg`;
+
+                const card = `
+                    <div class="disease-card bg-white rounded-lg shadow-md overflow-hidden">
+                        <img src="${imagePath}" alt="${displayName}" class="h-48 w-full object-cover" onerror="this.src='https://placehold.co/400x300/e0e7ff/4f46e5?text=No+Image'">
+                        <div class="p-4">
+                            <h3 class="text-lg font-semibold text-gray-800">${displayName}</h3>
+                        </div>
+                    </div>
+                `;
+                diseaseGrid.innerHTML += card;
+            });
+        }
+
+        searchInput.addEventListener('input', (e) => {
+            renderDiseases(e.target.value);
+        });
+
+        // Initial render
+        renderDiseases();
+    </script>
+</body>
+</html>
+

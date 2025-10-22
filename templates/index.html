@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CropHealth AI - Smart Farming Solutions</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+    </style>
+</head>
+<body class="bg-white">
+
+    <header class="bg-white/80 backdrop-blur-md sticky top-0 z-50 shadow-sm">
+        <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <a href="/" class="text-3xl font-bold text-green-600">
+                CropHealth AI
+            </a>
+            <div class="hidden md:flex items-center space-x-8">
+                <a href="/scanner" class="text-gray-600 hover:text-green-600 font-medium">Disease Scanner</a>
+                <a href="/library" class="text-gray-600 hover:text-green-600 font-medium">Disease Library</a>
+            </div>
+            <a href="/scanner" class="bg-green-600 text-white font-bold py-2 px-5 rounded-full hover:bg-green-700 transition duration-300">
+                Get Started
+            </a>
+        </nav>
+    </header>
+
+    <main>
+        <!-- Hero Section -->
+        <section class="container mx-auto px-6 py-20 md:py-32 flex flex-col md:flex-row items-center">
+            <div class="md:w-1/2 text-center md:text-left">
+                <h1 class="text-5xl md:text-7xl font-extrabold text-gray-800 leading-tight">
+                    Smart Farming, <span class="text-green-600">Smarter Yields</span>.
+                </h1>
+                <p class="mt-6 text-lg text-gray-500 max-w-xl mx-auto md:mx-0">
+                    Your personal agronomist is here. Use the power of AI to diagnose crop diseases and get instant treatment plans.
+                </p>
+                <div class="mt-10">
+                    <a href="/scanner" class="bg-green-600 text-white font-bold py-4 px-8 rounded-full hover:bg-green-700 transition duration-300 text-lg">
+                        Diagnose a Plant Now
+                    </a>
+                </div>
+            </div>
+            <div class="md:w-1/2 mt-12 md:mt-0 flex justify-center">
+                 <img src="/assets/ai-dashboard-screenshot.png" alt="AI Dashboard Screenshot" class="max-w-md rounded-xl shadow-2xl" onerror="this.src='https://placehold.co/600x400/dbeafe/1e3a8a?text=AI+Dashboard'"/>
+            </div>
+        </section>
+
+        <section class="bg-gray-50 py-20">
+            <div class="container mx-auto px-6">
+                <div class="text-center max-w-3xl mx-auto mb-16">
+                    <h2 class="text-4xl font-bold text-gray-800">Bridging the Gap for Modern Farmers</h2>
+                    <p class="mt-4 text-gray-500">We saw farmers struggling with outdated methods and a lack of accessible technology. They faced constant uncertainty that led to crop loss and wasted resources. We knew AI could change the game.</p>
+                </div>
+
+                <!-- Problem 1 -->
+                <div class="grid md:grid-cols-2 gap-12 items-center mb-16">
+                    <div>
+                        <h3 class="text-3xl font-bold text-red-600 mb-4">The Problem: Guesswork & Waste</h3>
+                        <p class="text-gray-600 text-lg">
+                            Farmers often apply fertilizers based on tradition rather than data. This guesswork leads to over- or under-fertilizing, which wastes money, harms the environment, and reduces potential yield. The lack of precise information creates a cycle of inefficiency that hurts both the farmer and the land.
+                        </p>
+                    </div>
+                    <div>
+                        <img src="/assets/Farmer-Fertilizer.jpg" alt="Farmer applying fertilizer" class="rounded-xl shadow-lg" onerror="this.src='https://placehold.co/600x400/fecaca/b91c1c?text=Wasted+Fertilizer'"/>
+                    </div>
+                </div>
+
+                <!-- Problem 2 -->
+                <div class="grid md:grid-cols-2 gap-12 items-center mb-16">
+                    <div class="md:order-2">
+                        <h3 class="text-3xl font-bold text-yellow-600 mb-4">The Problem: Slow Diagnosis</h3>
+                        <p class="text-gray-600 text-lg">
+                            Identifying a crop disease manually is slow and often inaccurate. By the time a farmer gets an expert opinion, a disease can spread, leading to significant and often preventable crop loss. This waiting game is a major source of risk and anxiety for farmers.
+                        </p>
+                    </div>
+                    <div class="md:order-1">
+                        <img src="/assets/Leaf-Disease.jpg" alt="A diseased plant leaf" class="rounded-xl shadow-lg" onerror="this.src='https://placehold.co/600x400/dcfce7/166534?text=Sick+Plant+Leaf'"/>
+                    </div>
+                </div>
+                
+                <!-- Problem 3 -->
+                <div class="grid md:grid-cols-2 gap-12 items-center">
+                    <div>
+                        <h3 class="text-3xl font-bold text-blue-600 mb-4">The Problem: The Tech Gap</h3>
+                        <p class="text-gray-600 text-lg">
+                           While advanced agricultural tech exists, it's often expensive, complex, and not designed for the everyday farmer. There's a huge need for simple, powerful, and free tools that can be used on a basic smartphone or computer, bringing the benefits of AI to everyone.
+                        </p>
+                    </div>
+                    <div>
+                        <img src="/assets/Farmer-Phone.jpg" alt="A farmer using a smartphone in their field" class="rounded-xl shadow-lg" onerror="this.src='https://placehold.co/600x400/dbeafe/1e3a8a?text=Farmer+with+Phone'"/>
+                    </div>
+                </div>
+
+                 <div class="mt-20 text-center">
+                    <h3 class="text-3xl font-bold text-green-600 mb-4">Our Solution: AI in Your Hands</h3>
+                    <p class="text-gray-700 max-w-4xl mx-auto text-xl">
+                        CropHealth AI is our answer. We put the power of a personal agronomist directly into the hands of farmers. Our tool provides instant, data-driven answers to their most pressing questions. No more guesswork, no more waiting. Just fast, accurate insights that help them protect their crops, save money, and secure their livelihood.
+                    </p>
+                </div>
+
+            </div>
+        </section>
+        
+    </main>
+</body>
+</html>
