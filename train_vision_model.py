@@ -4,10 +4,7 @@ from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Conv2D, MaxPooling2D, Flatten, Dense, Dropout
 import os
 
-def train_vision_model():
-    """
-    Handles the entire process of training the image recognition model.
-    """
+def train_vision_model():   
     print("Starting the vision model training process...")
 
     base_dir = 'New Plant Diseases Dataset(Augmented)' 
