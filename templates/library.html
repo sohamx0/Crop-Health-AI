@@ -11,51 +11,142 @@
             font-family: 'Inter', sans-serif;
         }
         .disease-card {
-            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+        .disease-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(22, 163, 74, 0.1) 0%, rgba(5, 150, 105, 0.1) 100%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        .disease-card:hover::before {
+            opacity: 1;
         }
         .disease-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            transform: translateY(-8px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+        .disease-card img {
+            transition: transform 0.3s ease;
+        }
+        .disease-card:hover img {
+            transform: scale(1.05);
         }
         .grid-container {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 1.5rem;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+        .search-container {
+            background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+        }
+        .gradient-text {
+            background: linear-gradient(135deg, #16a34a 0%, #059669 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .tag {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        .tag-healthy {
+            background-color: #dcfce7;
+            color: #166534;
+        }
+        .tag-disease {
+            background-color: #fee2e2;
+            color: #991b1b;
         }
     </style>
 </head>
-<body class="bg-gray-50">
+<body class="bg-gradient-to-br from-gray-50 to-gray-100">
 
-    <header class="bg-white/80 backdrop-blur-md sticky top-0 z-50 shadow-sm">
-        <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
-            <a href="/" class="text-3xl font-bold text-green-600">CropHealth AI</a>
+    <header class="bg-white border-b border-gray-100 sticky top-0 z-50 shadow-sm">
+        <nav class="container mx-auto px-6 py-5 flex justify-between items-center">
+            <a href="/" class="text-2xl font-bold text-green-600 flex items-center gap-2">
+                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                </svg>
+                CropHealth AI
+            </a>
             <div class="hidden md:flex items-center space-x-8">
-                <a href="/scanner" class="text-gray-600 hover:text-green-600 font-medium">Disease Scanner</a>
-                <a href="/dashboard" class="text-gray-600 hover:text-green-600 font-medium">Smart Dashboard</a>
+                <a href="/scanner" class="text-gray-700 hover:text-green-600 font-medium transition">Disease Scanner</a>
+                <a href="/dashboard" class="text-gray-700 hover:text-green-600 font-medium transition">Smart Dashboard</a>
             </div>
-            <a href="/" class="bg-green-600 text-white font-bold py-2 px-5 rounded-full hover:bg-green-700 transition duration-300">Home</a>
+            <a href="/" class="bg-green-600 text-white font-semibold py-3 px-6 rounded-lg hover:bg-green-700 transition shadow-sm hover:shadow-md">Home</a>
         </nav>
     </header>
 
-    <main class="container mx-auto px-6 py-12">
-        <div class="text-center mb-12">
-            <h1 class="text-5xl font-extrabold text-gray-800">Disease Library</h1>
-            <p class="text-gray-500 mt-3 text-lg max-w-2xl mx-auto">Browse our visual database of 38 plant diseases. Learn to identify them and find expert-backed prevention tips.</p>
-        </div>
-
-        <div class="mb-8 max-w-lg mx-auto">
-            <div class="relative">
-                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                    <svg class="h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd" /></svg>
+    <main>
+        <!-- Hero Section -->
+        <section class="search-container py-16">
+            <div class="container mx-auto px-6">
+                <div class="text-center mb-10">
+                    <div class="inline-block mb-4 px-4 py-2 bg-white rounded-full shadow-sm">
+                        <span class="text-green-700 font-semibold text-sm">📚 Comprehensive Database</span>
+                    </div>
+                    <h1 class="text-5xl md:text-6xl font-black text-gray-900 mb-4">
+                        Disease <span class="gradient-text">Library</span>
+                    </h1>
+                    <p class="text-gray-600 text-lg md:text-xl max-w-3xl mx-auto leading-relaxed">
+                        Browse our visual database of 38 plant diseases. Learn to identify them and discover expert-backed prevention strategies.
+                    </p>
                 </div>
-                <input id="searchInput" type="text" class="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-full leading-5 bg-white placeholder-gray-500 focus:outline-none focus:placeholder-gray-400 focus:ring-1 focus:ring-green-500 focus:border-green-500 sm:text-sm" placeholder="Search for a disease or crop (e.g., 'Tomato' or 'Blight')">
-            </div>
-        </div>
 
-        <div id="disease-grid" class="grid-container">
-            <!-- Disease cards will be injected here by JavaScript -->
-        </div>
-        <p id="no-results" class="text-center text-gray-500 text-lg mt-12 hidden">No diseases found matching your search.</p>
+                <div class="max-w-2xl mx-auto">
+                    <div class="relative">
+                        <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                            <svg class="h-6 w-6 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd" />
+                            </svg>
+                        </div>
+                        <input id="searchInput" type="text" class="block w-full pl-12 pr-4 py-4 border-2 border-gray-200 rounded-xl leading-5 bg-white placeholder-gray-400 focus:outline-none focus:placeholder-gray-500 focus:ring-2 focus:ring-green-500 focus:border-transparent text-base shadow-sm" placeholder="Search for a disease or crop (e.g., 'Tomato' or 'Blight')">
+                    </div>
+                    <div class="mt-4 flex flex-wrap gap-2 justify-center">
+                        <button class="filter-btn px-4 py-2 bg-white text-gray-700 rounded-lg text-sm font-medium hover:bg-green-50 hover:text-green-700 transition shadow-sm" data-filter="">All</button>
+                        <button class="filter-btn px-4 py-2 bg-white text-gray-700 rounded-lg text-sm font-medium hover:bg-green-50 hover:text-green-700 transition shadow-sm" data-filter="healthy">Healthy</button>
+                        <button class="filter-btn px-4 py-2 bg-white text-gray-700 rounded-lg text-sm font-medium hover:bg-green-50 hover:text-green-700 transition shadow-sm" data-filter="tomato">Tomato</button>
+                        <button class="filter-btn px-4 py-2 bg-white text-gray-700 rounded-lg text-sm font-medium hover:bg-green-50 hover:text-green-700 transition shadow-sm" data-filter="apple">Apple</button>
+                        <button class="filter-btn px-4 py-2 bg-white text-gray-700 rounded-lg text-sm font-medium hover:bg-green-50 hover:text-green-700 transition shadow-sm" data-filter="grape">Grape</button>
+                        <button class="filter-btn px-4 py-2 bg-white text-gray-700 rounded-lg text-sm font-medium hover:bg-green-50 hover:text-green-700 transition shadow-sm" data-filter="corn">Corn</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Disease Grid -->
+        <section class="container mx-auto px-6 py-12">
+            <div class="mb-6 flex justify-between items-center">
+                <p class="text-gray-600 font-medium">
+                    <span id="result-count">38</span> diseases found
+                </p>
+            </div>
+
+            <div id="disease-grid" class="grid-container">
+                <!-- Disease cards will be injected here by JavaScript -->
+            </div>
+            
+            <div id="no-results" class="text-center py-20 hidden">
+                <svg class="mx-auto h-16 w-16 text-gray-400 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                <p class="text-gray-500 text-xl font-medium">No diseases found matching your search</p>
+                <p class="text-gray-400 mt-2">Try adjusting your search terms</p>
+            </div>
+        </section>
     </main>
 
     <script>
@@ -78,42 +169,62 @@
         const diseaseGrid = document.getElementById('disease-grid');
         const searchInput = document.getElementById('searchInput');
         const noResults = document.getElementById('no-results');
+        const resultCount = document.getElementById('result-count');
+        const filterBtns = document.querySelectorAll('.filter-btn');
 
         function formatDiseaseName(name) {
             return name.replace(/___/g, ' - ').replace(/_/g, ' ');
         }
 
         function createFileName(name) {
-            // This is the new, more robust function
             return name.toLowerCase()
-                .replace(/___/g, ' ') // Step 1: Replace separator with a space
-                .replace(/_/g, ' ')   // Step 2: Replace underscores with a space
-                .replace(/\s+/g, '-') // Step 3: Replace all spaces (single or multiple) with a single hyphen
-                .replace(/\(|\)/g, '') // Step 4: Remove parentheses
-                .replace(/,-/g, '-'); // Step 5: Clean up any weird artifacts
+                .replace(/___/g, ' ')
+                .replace(/_/g, ' ')
+                .replace(/\s+/g, '-')
+                .replace(/\(|\)/g, '')
+                .replace(/,-/g, '-');
+        }
+
+        function isHealthy(name) {
+            return name.toLowerCase().includes('healthy');
+        }
+
+        function getCropName(name) {
+            return name.split('___')[0].replace(/_/g, ' ');
         }
 
         function renderDiseases(filter = '') {
             diseaseGrid.innerHTML = '';
             const filteredDiseases = diseases.filter(d => d.toLowerCase().includes(filter.toLowerCase()));
 
+            resultCount.textContent = filteredDiseases.length;
+
             if (filteredDiseases.length === 0) {
                 noResults.classList.remove('hidden');
+                diseaseGrid.classList.add('hidden');
             } else {
                 noResults.classList.add('hidden');
+                diseaseGrid.classList.remove('hidden');
             }
 
             filteredDiseases.forEach(disease => {
                 const displayName = formatDiseaseName(disease);
                 const fileName = createFileName(disease);
-                // We assume all images are .jpg, which is a safe bet for photos.
                 const imagePath = `/assets/library_images/${fileName}.jpg`;
+                const healthy = isHealthy(disease);
+                const cropName = getCropName(disease);
 
                 const card = `
-                    <div class="disease-card bg-white rounded-lg shadow-md overflow-hidden">
-                        <img src="${imagePath}" alt="${displayName}" class="h-48 w-full object-cover" onerror="this.src='https://placehold.co/400x300/e0e7ff/4f46e5?text=No+Image'">
-                        <div class="p-4">
-                            <h3 class="text-lg font-semibold text-gray-800">${displayName}</h3>
+                    <div class="disease-card bg-white rounded-xl shadow-md overflow-hidden">
+                        <div class="relative overflow-hidden h-56">
+                            <img src="${imagePath}" alt="${displayName}" class="h-full w-full object-cover" onerror="this.src='https://placehold.co/400x300/e0e7ff/4f46e5?text=No+Image'">
+                            <div class="absolute top-3 right-3">
+                                <span class="tag ${healthy ? 'tag-healthy' : 'tag-disease'}">${healthy ? 'Healthy' : 'Disease'}</span>
+                            </div>
+                        </div>
+                        <div class="p-5">
+                            <p class="text-sm text-green-600 font-semibold mb-1">${cropName}</p>
+                            <h3 class="text-lg font-bold text-gray-900 leading-tight">${displayName}</h3>
                         </div>
                     </div>
                 `;
@@ -125,9 +236,22 @@
             renderDiseases(e.target.value);
         });
 
+        filterBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const filter = btn.dataset.filter;
+                searchInput.value = filter;
+                renderDiseases(filter);
+                
+                // Update active state
+                filterBtns.forEach(b => b.classList.remove('bg-green-600', 'text-white'));
+                filterBtns.forEach(b => b.classList.add('bg-white', 'text-gray-700'));
+                btn.classList.remove('bg-white', 'text-gray-700');
+                btn.classList.add('bg-green-600', 'text-white');
+            });
+        });
+
         // Initial render
         renderDiseases();
     </script>
 </body>
 </html>
-
