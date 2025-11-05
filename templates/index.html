@@ -1,183 +1,235 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CropHealth AI - Smart Farming Solutions</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-    <style>
-        body { 
-            font-family: 'Inter', sans-serif;
-        }
-        .gradient-text {
-            background: linear-gradient(135deg, #16a34a 0%, #059669 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-        .hero-pattern {
-            background-image: radial-gradient(circle at 1px 1px, rgb(229 231 235 / 0.4) 1px, transparent 0);
-            background-size: 40px 40px;
-        }
-        .feature-card {
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-        .feature-card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1);
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CropHealth AI – Smart Farming, Smarter Yields</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet" />
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+    }
+    .gradient-text {
+      background: linear-gradient(135deg, #16a34a, #059669);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .hero-pattern {
+      background: radial-gradient(circle at 1px 1px, rgb(229 231 235 / 0.4) 1px, transparent 0);
+      background-size: 40px 40px;
+    }
+    .feature-card {
+      transition: all 0.3s ease;
+    }
+    .feature-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 20px 30px -8px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Google Translate Styling */
+    .goog-te-banner-frame.skiptranslate { display: none !important; }
+    body { top: 0px !important; }
+    .goog-logo-link, .goog-te-gadget span, .goog-te-gadget > span > a { display: none !important; }
+    .goog-te-gadget { color: transparent !important; font-size: 0 !important; }
+    .goog-te-gadget .goog-te-combo {
+      background-color: white;
+      border: 2px solid #e5e7eb;
+      border-radius: 0.75rem;
+      padding: 0.625rem 2.5rem 0.625rem 1rem;
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: #374151;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-family: 'Inter', sans-serif;
+      outline: none;
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%2316a34a'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: left 0.75rem center;
+      background-size: 1.25rem;
+      padding-left: 2.5rem;
+    }
+    .goog-te-gadget .goog-te-combo:hover {
+      border-color: #16a34a;
+      box-shadow: 0 0 0 3px rgba(22, 163, 74, 0.1);
+    }
+    .goog-te-gadget .goog-te-combo:focus {
+      border-color: #16a34a;
+      box-shadow: 0 0 0 3px rgba(22, 163, 74, 0.15);
+    }
+    @media (max-width: 768px) {
+      #google_translate_element { margin-top: 1rem; }
+    }
+  </style>
 </head>
-<body class="bg-white">
 
-    <header class="border-b border-gray-100">
-        <nav class="container mx-auto px-6 py-5 flex justify-between items-center">
-            <a href="/" class="text-2xl font-bold text-green-600 flex items-center gap-2">
-                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                </svg>
-                CropHealth AI
-            </a>
-            <div class="hidden md:flex items-center space-x-8">
-                <a href="/scanner" class="text-gray-700 hover:text-green-600 font-medium transition">Disease Scanner</a>
-                <a href="/library" class="text-gray-700 hover:text-green-600 font-medium transition">Disease Library</a>
-            </div>
-            <a href="/scanner" class="bg-green-600 text-white font-semibold py-3 px-6 rounded-lg hover:bg-green-700 transition shadow-sm hover:shadow-md">
-                Get Started
-            </a>
-        </nav>
-    </header>
+<body class="bg-white text-gray-800">
+  <!-- Navbar -->
+  <header class="border-b border-gray-100 bg-white/70 backdrop-blur-lg sticky top-0 z-50">
+    <nav class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center flex-wrap">
+      <a href="index.html" class="text-2xl font-extrabold text-green-600 flex items-center gap-2">
+        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+        CropHealth AI
+      </a>
+      <div class="hidden md:flex items-center gap-8">
+        <a href="#features" class="hover:text-green-600 font-medium">Features</a>
+        <a href="#problems" class="hover:text-green-600 font-medium">Problems</a>
+        <a href="library.html" class="hover:text-green-600 font-medium">Library</a>
+        <a href="vision_checker.html" class="hover:text-green-600 font-medium">AI Plant Doctor</a>
+        <div id="google_translate_element" class="ml-4"></div>
+      </div>
+      <a href="vision_checker.html" class="bg-green-600 text-white font-semibold py-2.5 px-6 rounded-lg hover:bg-green-700 transition">
+        Try Now
+      </a>
+    </nav>
+  </header>
 
-    <main>
-        <!-- Hero Section -->
-        <section class="hero-pattern">
-            <div class="container mx-auto px-6 py-24 md:py-32">
-                <div class="flex flex-col md:flex-row items-center gap-16">
-                    <div class="md:w-1/2 text-center md:text-left">
-                        <div class="inline-block mb-4 px-4 py-2 bg-green-50 rounded-full">
-                            <span class="text-green-700 font-semibold text-sm">🌱 AI-Powered Agriculture</span>
-                        </div>
-                        <h1 class="text-5xl md:text-6xl lg:text-7xl font-black text-gray-900 leading-tight mb-6">
-                            Smart Farming,<br/>
-                            <span class="gradient-text">Smarter Yields</span>
-                        </h1>
-                        <p class="text-xl text-gray-600 max-w-xl mx-auto md:mx-0 mb-10 leading-relaxed">
-                            Your personal agronomist powered by AI. Diagnose crop diseases instantly and get actionable treatment plans.
-                        </p>
-                        <div class="flex flex-col sm:flex-row gap-4 justify-center md:justify-start">
-                            <a href="/scanner" class="bg-green-600 text-white font-semibold py-4 px-8 rounded-lg hover:bg-green-700 transition shadow-lg hover:shadow-xl">
-                                Diagnose a Plant Now →
-                            </a>
-                            <a href="/library" class="bg-white text-gray-700 font-semibold py-4 px-8 rounded-lg border-2 border-gray-200 hover:border-green-600 hover:text-green-600 transition">
-                                View Disease Library
-                            </a>
-                        </div>
-                    </div>
-                    <div class="md:w-1/2 flex justify-center">
-                        <div class="relative">
-                            <div class="absolute -inset-4 bg-gradient-to-r from-green-400 to-emerald-500 rounded-2xl blur-2xl opacity-20"></div>
-                            <img src="/assets/ai-dashboard-screenshot.png" alt="AI Dashboard Screenshot" class="relative max-w-lg w-full rounded-2xl shadow-2xl border-8 border-white" onerror="this.src='https://placehold.co/600x400/dbeafe/1e3a8a?text=AI+Dashboard'"/>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
+  <!-- Hero -->
+  <section class="hero-pattern relative overflow-hidden">
+    <div class="max-w-7xl mx-auto px-6 py-24 flex flex-col md:flex-row items-center gap-12">
+      <div class="flex-1 text-center md:text-left">
+        <h1 class="text-5xl md:text-6xl font-black leading-tight text-gray-900">
+          Smart Farming,<br />
+          <span class="gradient-text">Smarter Yields</span>
+        </h1>
+        <p class="text-lg md:text-xl text-gray-600 mt-6 max-w-lg mx-auto md:mx-0">
+          Diagnose crop diseases instantly and get actionable treatment plans — powered by AI to protect your fields and boost productivity.
+        </p>
+        <div class="mt-10 flex flex-col sm:flex-row gap-4 justify-center md:justify-start">
+          <a href="vision_checker.html" class="bg-green-600 text-white font-semibold py-4 px-8 rounded-lg hover:bg-green-700 shadow-lg transition">Start Scanning →</a>
+          <a href="library.html" class="border-2 border-green-600 text-green-700 font-semibold py-4 px-8 rounded-lg hover:bg-green-50 transition">Disease Library</a>
+        </div>
+      </div>
+      <div class="flex-1">
+        <img src="/assets/ai-dashboard-screenshot.png" onerror="this.src='https://placehold.co/600x400/dbeafe/1e3a8a?text=AI+Dashboard'" alt="AI Dashboard" class="rounded-2xl shadow-2xl border-8 border-white w-full" />
+      </div>
+    </div>
+  </section>
 
-        <section class="bg-gradient-to-b from-gray-50 to-white py-24">
-            <div class="container mx-auto px-6">
-                <div class="text-center max-w-3xl mx-auto mb-20">
-                    <h2 class="text-4xl md:text-5xl font-black text-gray-900 mb-6">Bridging the Gap for Modern Farmers</h2>
-                    <p class="text-xl text-gray-600 leading-relaxed">We saw farmers struggling with outdated methods and inaccessible technology. They faced constant uncertainty leading to crop loss and wasted resources. We knew AI could change the game.</p>
-                </div>
+  <!-- Features -->
+  <section id="features" class="bg-gray-50 py-24">
+    <div class="max-w-6xl mx-auto px-6 text-center">
+      <h2 class="text-4xl font-extrabold text-gray-900 mb-6">Why CropHealth AI?</h2>
+      <p class="text-lg text-gray-600 max-w-2xl mx-auto mb-16">Empowering farmers with simple, data-driven insights that cut costs, prevent losses, and boost yields — all from your smartphone.</p>
+      <div class="grid md:grid-cols-3 gap-10">
+        <div class="feature-card bg-white rounded-2xl p-8 shadow-md">
+          <div class="bg-green-100 w-12 h-12 flex items-center justify-center rounded-xl mb-6">
+            <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3" /></svg>
+          </div>
+          <h3 class="text-2xl font-bold mb-3">Instant Diagnosis</h3>
+          <p class="text-gray-600">Scan a leaf, and our AI identifies diseases in seconds — no expert needed.</p>
+        </div>
+        <div class="feature-card bg-white rounded-2xl p-8 shadow-md">
+          <div class="bg-yellow-100 w-12 h-12 flex items-center justify-center rounded-xl mb-6">
+            <svg class="w-6 h-6 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01M9 12l2 2 4-4" /></svg>
+          </div>
+          <h3 class="text-2xl font-bold mb-3">Smart Recommendations</h3>
+          <p class="text-gray-600">Get tailored advice on fertilizers and pest control, backed by data and science.</p>
+        </div>
+        <div class="feature-card bg-white rounded-2xl p-8 shadow-md">
+          <div class="bg-blue-100 w-12 h-12 flex items-center justify-center rounded-xl mb-6">
+            <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 13h18M5 17h14" /></svg>
+          </div>
+          <h3 class="text-2xl font-bold mb-3">Accessible Anywhere</h3>
+          <p class="text-gray-600">Simple, powerful, and free — designed for every farmer, on any device.</p>
+        </div>
+      </div>
+    </div>
+  </section>
 
-                <!-- Problem Cards -->
-                <div class="space-y-12 mb-20">
-                    <!-- Problem 1 -->
-                    <div class="feature-card bg-white rounded-2xl shadow-lg overflow-hidden">
-                        <div class="grid md:grid-cols-2 gap-0">
-                            <div class="p-10 md:p-12 flex flex-col justify-center">
-                                <div class="inline-block w-12 h-12 bg-red-100 rounded-xl flex items-center justify-center mb-6">
-                                    <svg class="w-6 h-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
-                                    </svg>
-                                </div>
-                                <h3 class="text-3xl font-bold text-gray-900 mb-4">Guesswork & Waste</h3>
-                                <p class="text-gray-600 text-lg leading-relaxed">
-                                    Farmers often apply fertilizers based on tradition rather than data. This guesswork leads to over- or under-fertilizing, which wastes money, harms the environment, and reduces potential yield.
-                                </p>
-                            </div>
-                            <div class="h-64 md:h-auto">
-                                <img src="/assets/Farmer-Fertilizer.jpg" alt="Farmer applying fertilizer" class="w-full h-full object-cover" onerror="this.src='https://placehold.co/600x400/fecaca/b91c1c?text=Wasted+Fertilizer'"/>
-                            </div>
-                        </div>
-                    </div>
+  <!-- Problem Cards Section -->
+  <section id="problems" class="bg-white py-24">
+    <div class="max-w-6xl mx-auto px-6 space-y-12">
+      
+      <!-- Card 1 -->
+      <div class="grid md:grid-cols-2 rounded-2xl overflow-hidden shadow-lg">
+        <div class="bg-white p-10">
+          <div class="inline-flex items-center justify-center w-12 h-12 bg-red-100 rounded-xl mb-4">
+            <svg class="w-6 h-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01M21 12A9 9 0 113 12a9 9 0 0118 0z"/>
+            </svg>
+          </div>
+          <h3 class="text-2xl font-extrabold text-gray-900 mb-3">Guesswork & Waste</h3>
+          <p class="text-gray-600 leading-relaxed">
+            Farmers often apply fertilizers based on tradition rather than data. This guesswork leads to over- or under-fertilizing,
+            which wastes money, harms the environment, and reduces potential yield.
+          </p>
+        </div>
+        <div class="bg-red-100 flex items-center justify-center text-3xl font-bold text-red-700 p-10">
+          Wasted Fertilizer
+        </div>
+      </div>
 
-                    <!-- Problem 2 -->
-                    <div class="feature-card bg-white rounded-2xl shadow-lg overflow-hidden">
-                        <div class="grid md:grid-cols-2 gap-0">
-                            <div class="h-64 md:h-auto md:order-1">
-                                <img src="/assets/Leaf-Disease.jpg" alt="A diseased plant leaf" class="w-full h-full object-cover" onerror="this.src='https://placehold.co/600x400/dcfce7/166534?text=Sick+Plant+Leaf'"/>
-                            </div>
-                            <div class="p-10 md:p-12 flex flex-col justify-center md:order-2">
-                                <div class="inline-block w-12 h-12 bg-yellow-100 rounded-xl flex items-center justify-center mb-6">
-                                    <svg class="w-6 h-6 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                                    </svg>
-                                </div>
-                                <h3 class="text-3xl font-bold text-gray-900 mb-4">Slow Diagnosis</h3>
-                                <p class="text-gray-600 text-lg leading-relaxed">
-                                    Identifying crop diseases manually is slow and often inaccurate. By the time a farmer gets expert opinion, disease can spread, leading to significant and preventable crop loss.
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- Problem 3 -->
-                    <div class="feature-card bg-white rounded-2xl shadow-lg overflow-hidden">
-                        <div class="grid md:grid-cols-2 gap-0">
-                            <div class="p-10 md:p-12 flex flex-col justify-center">
-                                <div class="inline-block w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center mb-6">
-                                    <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
-                                    </svg>
-                                </div>
-                                <h3 class="text-3xl font-bold text-gray-900 mb-4">The Tech Gap</h3>
-                                <p class="text-gray-600 text-lg leading-relaxed">
-                                   Advanced agricultural tech exists, but it's often expensive, complex, and not designed for everyday farmers. There's a huge need for simple, powerful, free tools accessible on any smartphone.
-                                </p>
-                            </div>
-                            <div class="h-64 md:h-auto">
-                                <img src="/assets/Farmer-Phone.jpg" alt="A farmer using a smartphone in their field" class="w-full h-full object-cover" onerror="this.src='https://placehold.co/600x400/dbeafe/1e3a8a?text=Farmer+with+Phone'"/>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+      <!-- Card 2 -->
+      <div class="grid md:grid-cols-2 rounded-2xl overflow-hidden shadow-lg">
+        <div class="order-2 md:order-1 bg-green-100 flex items-center justify-center text-3xl font-bold text-green-700 p-10">
+          Preventable Loss
+        </div>
+        <div class="order-1 md:order-2 bg-white p-10">
+          <div class="inline-flex items-center justify-center w-12 h-12 bg-yellow-100 rounded-xl mb-4">
+            <svg class="w-6 h-6 text-yellow-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+            </svg>
+          </div>
+          <h3 class="text-2xl font-extrabold text-gray-900 mb-3">Slow Diagnosis</h3>
+          <p class="text-gray-600 leading-relaxed">
+            By the time a farmer identifies a disease, it may have already spread across the field.
+            CropHealth AI ensures early detection to save time and yield.
+          </p>
+        </div>
+      </div>
 
-                <!-- Solution Section -->
-                <div class="relative">
-                    <div class="absolute inset-0 bg-gradient-to-r from-green-500 to-emerald-600 rounded-3xl transform -rotate-1"></div>
-                    <div class="relative bg-gradient-to-r from-green-600 to-emerald-600 rounded-3xl p-12 md:p-16 text-center shadow-2xl">
-                        <div class="inline-block w-16 h-16 bg-white/20 rounded-2xl flex items-center justify-center mb-6">
-                            <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
-                            </svg>
-                        </div>
-                        <h3 class="text-4xl md:text-5xl font-black text-white mb-6">Our Solution: AI in Your Hands</h3>
-                        <p class="text-white/90 max-w-4xl mx-auto text-xl leading-relaxed">
-                            CropHealth AI puts the power of a personal agronomist directly into farmers' hands. Our tool provides instant, data-driven answers to their most pressing questions. No more guesswork, no more waiting. Just fast, accurate insights that help protect crops, save money, and secure livelihoods.
-                        </p>
-                        <div class="mt-10">
-                            <a href="/scanner" class="inline-block bg-white text-green-600 font-bold py-4 px-10 rounded-lg hover:bg-gray-50 transition shadow-xl">
-                                Try It Now — It's Free
-                            </a>
-                        </div>
-                    </div>
-                </div>
+      <!-- Card 3 -->
+      <div class="grid md:grid-cols-2 rounded-2xl overflow-hidden shadow-lg">
+        <div class="bg-white p-10">
+          <div class="inline-flex items-center justify-center w-12 h-12 bg-blue-100 rounded-xl mb-4">
+            <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+            </svg>
+          </div>
+          <h3 class="text-2xl font-extrabold text-gray-900 mb-3">The Tech Gap</h3>
+          <p class="text-gray-600 leading-relaxed">
+            Many tools are complex or expensive. CropHealth AI bridges the gap, providing free, simple,
+            and effective technology for farmers worldwide.
+          </p>
+        </div>
+        <div class="bg-blue-100 flex items-center justify-center text-3xl font-bold text-blue-700 p-10">
+          Accessible Tech
+        </div>
+      </div>
 
-            </div>
-        </section>
-        
-    </main>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="bg-gradient-to-r from-green-600 to-emerald-600 py-24 text-center text-white">
+    <div class="max-w-4xl mx-auto px-6">
+      <h2 class="text-4xl md:text-5xl font-extrabold mb-6">Put AI in Your Hands</h2>
+      <p class="text-lg text-white/90 mb-10">No more guesswork. Protect crops, save money, and grow smarter with CropHealth AI.</p>
+      <a href="vision_checker.html" class="bg-white text-green-700 font-bold py-4 px-10 rounded-lg hover:bg-gray-50 transition shadow-xl">Try It Free →</a>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="bg-gray-900 text-gray-400 py-12 text-center">
+    <p>© 2025 CropHealth AI. All rights reserved.</p>
+  </footer>
+
+  <!-- Google Translate Script -->
+  <script type="text/javascript">
+    function googleTranslateElementInit() {
+      new google.translate.TranslateElement({
+        pageLanguage: 'en',
+        includedLanguages: 'en,hi,mr,bn,te,ta,gu,kn,ml,pa,ur,es,fr,de,zh-CN,ar',
+        layout: google.translate.TranslateElement.InlineLayout.SIMPLE,
+        autoDisplay: false
+      }, 'google_translate_element');
+    }
+  </script>
+  <script src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 </body>
 </html>

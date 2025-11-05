@@ -41,6 +41,58 @@
         .scanner-bg {
             background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 50%, #f0fdf4 100%);
         }
+        /* Google Translate Styling */
+        .goog-te-banner-frame.skiptranslate {
+            display: none !important;
+        }
+        body {
+            top: 0px !important;
+        }
+        .goog-logo-link {
+            display: none !important;
+        }
+        .goog-te-gadget {
+            color: transparent !important;
+            font-size: 0 !important;
+        }
+        .goog-te-gadget .goog-te-combo {
+            background-color: white;
+            border: 2px solid #e5e7eb;
+            border-radius: 0.75rem;
+            padding: 0.625rem 2.5rem 0.625rem 1rem;
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: #374151;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Inter', sans-serif;
+            outline: none;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%2316a34a'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: left 0.75rem center;
+            background-size: 1.25rem;
+            padding-left: 2.5rem;
+        }
+        .goog-te-gadget .goog-te-combo:hover {
+            border-color: #16a34a;
+            box-shadow: 0 0 0 3px rgba(22, 163, 74, 0.1);
+        }
+        .goog-te-gadget .goog-te-combo:focus {
+            border-color: #16a34a;
+            box-shadow: 0 0 0 3px rgba(22, 163, 74, 0.1);
+        }
+        .goog-te-gadget span {
+            display: none !important;
+        }
+        .goog-te-gadget > span > a {
+            display: none !important;
+        }
+        @media (max-width: 768px) {
+            #google_translate_element {
+                margin-top: 1rem;
+            }
+        }
     </style>
 </head>
 <body class="bg-gradient-to-br from-gray-50 to-gray-100">
@@ -55,6 +107,7 @@
             </a>
             <div class="hidden md:flex items-center space-x-8">
                 <a href="/library" class="text-gray-700 hover:text-green-600 font-medium transition">Disease Library</a>
+                <div id="google_translate_element" class="inline-block"></div>
             </div>
             <a href="/" class="bg-gray-600 text-white font-semibold py-3 px-6 rounded-lg hover:bg-gray-700 transition shadow-sm hover:shadow-md">Home</a>
         </nav>
@@ -299,5 +352,18 @@
             resultContainer.innerHTML = '';
         }
     </script>
+
+    <!-- Google Translate Script -->
+    <script type="text/javascript">
+        function googleTranslateElementInit() {
+            new google.translate.TranslateElement({
+                pageLanguage: 'en',
+                includedLanguages: 'en,hi,mr,bn,te,ta,gu,kn,ml,pa,ur,es,fr,de,zh-CN,ar',
+                layout: google.translate.TranslateElement.InlineLayout.SIMPLE,
+                autoDisplay: false
+            }, 'google_translate_element');
+        }
+    </script>
+    <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 </body>
 </html>
