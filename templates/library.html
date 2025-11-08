@@ -128,22 +128,21 @@
 
     <header class="bg-white border-b border-gray-100 sticky top-0 z-50 shadow-sm">
         <nav class="container mx-auto px-6 py-5 flex justify-between items-center">
-            <a href="index.html" class="text-2xl font-bold text-green-600 flex items-center gap-2">
+            <a href="/" class="text-2xl font-bold text-green-600 flex items-center gap-2">
                 <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                 </svg>
                 CropHealth AI
             </a>
             <div class="hidden md:flex items-center space-x-8">
-                <a href="vision_checker.html" class="text-gray-700 hover:text-green-600 font-medium transition">Disease Scanner</a>
+                <a href="/scanner" class="text-gray-700 hover:text-green-600 font-medium transition">Disease Scanner</a>
                 <div id="google_translate_element" class="inline-block"></div>
             </div>
-            <a href="index.html" class="bg-green-600 text-white font-semibold py-3 px-6 rounded-lg hover:bg-green-700 transition shadow-sm hover:shadow-md">Home</a>
+            <a href="/" class="bg-green-600 text-white font-semibold py-3 px-6 rounded-lg hover:bg-green-700 transition shadow-sm hover:shadow-md">Home</a>
         </nav>
     </header>
 
     <main>
-        <!-- Hero Section -->
         <section class="search-container py-16">
             <div class="container mx-auto px-6">
                 <div class="text-center mb-10">
@@ -179,7 +178,6 @@
             </div>
         </section>
 
-        <!-- Disease Grid -->
         <section class="container mx-auto px-6 py-12">
             <div class="mb-6 flex justify-between items-center">
                 <p class="text-gray-600 font-medium">
@@ -188,8 +186,7 @@
             </div>
 
             <div id="disease-grid" class="grid-container">
-                <!-- Disease cards will be injected here by JavaScript -->
-            </div>
+                </div>
             
             <div id="no-results" class="text-center py-20 hidden">
                 <svg class="mx-auto h-16 w-16 text-gray-400 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -306,7 +303,6 @@
         renderDiseases();
     </script>
 
-    <!-- Google Translate Script -->
     <script type="text/javascript">
         function googleTranslateElementInit() {
             new google.translate.TranslateElement({
