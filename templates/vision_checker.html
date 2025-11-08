@@ -115,7 +115,6 @@
 
     <main class="container mx-auto px-4 py-12">
         <div class="max-w-2xl mx-auto">
-            <!-- Header Section -->
             <div class="text-center mb-8 animate-fade-in">
                 <div class="inline-block mb-4 px-4 py-2 bg-white rounded-full shadow-sm">
                     <span class="text-green-700 font-semibold text-sm">🔬 AI-Powered Analysis</span>
@@ -126,7 +125,6 @@
                 <p class="text-gray-600 text-lg">Upload a leaf photo for instant, location-aware diagnosis</p>
             </div>
 
-            <!-- Upload Section -->
             <div id="upload-section" class="bg-white p-8 md:p-10 rounded-2xl shadow-xl animate-fade-in">
                 <div id="uploadArea" class="upload-area-hover border-2 border-dashed border-gray-300 rounded-xl p-12 cursor-pointer text-center">
                     <input type="file" id="fileInput" class="hidden" accept="image/*">
@@ -267,11 +265,7 @@
             ` : '';
 
             const formattedFertilizer = fertilizer.replace(/\n/g, '<br>')
-                                                  .replace(/\*\*✅ Recommendation:/g, '<br><strong class="text-green-700">✅ Recommendation:</strong>')
-                                                  .replace(/\*\*⚠️/g, '<br><strong class="text-yellow-700">⚠️')
-                                                  .replace(/\*\*💧/g, '<br><strong class="text-blue-700">💧')
-                                                  .replace(/\*\*🔥/g, '<br><strong class="text-orange-700">🔥')
-                                                  .replace(/\*\*/g, '');
+                                                  .replace(/\*\*/g, ''); // Removed the bold formatting as requested
 
             const resultHtml = `
                 <div class="animate-fade-in space-y-6">
@@ -353,7 +347,6 @@
         }
     </script>
 
-    <!-- Google Translate Script -->
     <script type="text/javascript">
         function googleTranslateElementInit() {
             new google.translate.TranslateElement({
