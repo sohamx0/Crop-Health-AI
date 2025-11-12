@@ -1,25 +1,26 @@
-Ignore Python's cache files
-pycache/
-
-Ignore virtual environments
+# --- Python Cache & Environments ---
+__pycache__/
 venv/
 *.venv
+edi_env/
+assets/
+TEMP/
 
-Ignore the big saved model files
+# --- Secret Keys ---
+*.env
+.env
+
+# --- Large AI Models ---
+# (These are too big for GitHub)
 *.h5
+*.h5.
+*.hdf5
 *.joblib
 
---- IGNORE ALL DATASETS ---
-We'll tell people where to download this in the README
-*.csv
-New Plant Diseases Dataset(Augmented)/
-
---- IGNORE VS CODE JUNK ---
+# --- VS Code & OS Junk ---
 .vscode/
-tempCodeRunnerFile.py
+.DS_Store
 
-Ignore local asset folders (like library images)
-assets/
-
-
-.env
+# --- Datasets ---
+# (You should tell people to download this separately)
+New Plant Diseases Dataset(Augmented)/
