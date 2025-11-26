@@ -1,229 +1,232 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Disease Library - CropHealth AI</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-    <style>
-        body {
-            font-family: 'Inter', sans-serif;
-        }
-        .disease-card {
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            position: relative;
-            overflow: hidden;
-        }
-        .disease-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: linear-gradient(135deg, rgba(22, 163, 74, 0.1) 0%, rgba(5, 150, 105, 0.1) 100%);
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-        .disease-card:hover::before {
-            opacity: 1;
-        }
-        .disease-card:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-        }
-        .disease-card img {
-            transition: transform 0.3s ease;
-        }
-        .disease-card:hover img {
-            transform: scale(1.05);
-        }
-        .grid-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 2rem;
-        }
-        .search-container {
-            background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
-        }
-        .gradient-text {
-            background: linear-gradient(135deg, #16a34a 0%, #059669 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-        .tag {
-            display: inline-block;
-            padding: 0.25rem 0.75rem;
-            border-radius: 9999px;
-            font-size: 0.75rem;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-        }
-        .tag-healthy {
-            background-color: #dcfce7;
-            color: #166534;
-        }
-        .tag-disease {
-            background-color: #fee2e2;
-            color: #991b1b;
-        }
-        /* Google Translate Styling */
-        .goog-te-banner-frame.skiptranslate {
-            display: none !important;
-        }
-        body {
-            top: 0px !important;
-        }
-        .goog-logo-link {
-            display: none !important;
-        }
-        .goog-te-gadget {
-            color: transparent !important;
-            font-size: 0 !important;
-        }
-        .goog-te-gadget .goog-te-combo {
-            background-color: white;
-            border: 2px solid #e5e7eb;
-            border-radius: 0.75rem;
-            padding: 0.625rem 2.5rem 0.625rem 1rem;
-            font-size: 0.875rem;
-            font-weight: 500;
-            color: #374151;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            font-family: 'Inter', sans-serif;
-            outline: none;
-            appearance: none;
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%2316a34a'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129'/%3E%3C/svg%3E");
-            background-repeat: no-repeat;
-            background-position: left 0.75rem center;
-            background-size: 1.25rem;
-            padding-left: 2.5rem;
-        }
-        .goog-te-gadget .goog-te-combo:hover {
-            border-color: #16a34a;
-            box-shadow: 0 0 0 3px rgba(22, 163, 74, 0.1);
-        }
-        .goog-te-gadget .goog-te-combo:focus {
-            border-color: #16a34a;
-            box-shadow: 0 0 0 3px rgba(22, 163, 74, 0.1);
-        }
-        .goog-te-gadget span {
-            display: none !important;
-        }
-        .goog-te-gadget > span > a {
-            display: none !important;
-        }
-        @media (max-width: 768px) {
-            #google_translate_element {
-                margin-top: 1rem;
-            }
-        }
-    </style>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Disease Library – CropHealth AI</title>
+  <link rel="icon" href="data:,">
+  
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      color: #111827;
+      scroll-behavior: smooth;
+    }
+
+    ::-webkit-scrollbar { width: 8px; }
+    ::-webkit-scrollbar-track { background: #f1f1f1; }
+    ::-webkit-scrollbar-thumb { background: #16a34a; border-radius: 4px; }
+
+    /* --- GOOGLE TRANSLATE FIXED CSS --- */
+    .goog-te-banner-frame { display: none !important; }
+    body { top: 0 !important; }
+
+    .goog-te-gadget {
+        font-family: 'Inter', sans-serif !important;
+        font-size: 0px !important;
+        color: transparent !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        width: 100%;
+    }
+
+    .goog-te-combo {
+        display: block !important;
+        width: 100% !important;
+        height: 40px !important;
+        color: #374151 !important;
+        background-color: #ffffff !important;
+        border: 1px solid #e5e7eb !important;
+        border-radius: 8px !important;
+        padding: 0 12px !important;
+        font-size: 14px !important; /* Force visible font size */
+        font-weight: 500 !important;
+        outline: none !important;
+        cursor: pointer !important;
+        margin: 0 !important;
+        box-sizing: border-box !important;
+    }
+
+    .goog-logo-link, .goog-te-gadget span, .goog-te-gadget .goog-te-gadget-icon { display: none !important; }
+    .goog-te-gadget > div { display: inline-block !important; width: 100% !important; }
+
+    /* Library Card Styles */
+    .disease-card {
+      transition: .25s;
+      overflow: hidden;
+    }
+    .disease-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 20px 30px -10px rgba(0,0,0,0.15);
+    }
+    .disease-card img { transition: .25s; }
+    .disease-card:hover img { transform: scale(1.05); }
+
+    .tag {
+      padding: 0.25rem 0.75rem;
+      border-radius: 9999px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+    }
+    .tag-healthy { background: #dcfce7; color: #166534; }
+    .tag-disease { background: #fee2e2; color: #991b1b; }
+
+    #translate-btn {
+  background-color: #FFFFFF;
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  border-radius: 9999px; /* makes it a pill */
+  padding: 10px 22px; /* height + horizontal width */
+  font-size: 16px;
+  font-weight: 600;
+  color: rgba(0, 0, 0, 0.85);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  box-shadow: rgba(0, 0, 0, 0.03) 0 1px 3px;
+  transition: all 250ms ease;
+}
+
+#translate-btn:hover,
+#translate-btn:focus {
+  border-color: rgba(0, 0, 0, 0.2);
+  box-shadow: rgba(0, 0, 0, 0.1) 0 4px 12px;
+  color: rgba(0, 0, 0, 0.65);
+  transform: translateY(-1px);
+}
+
+#translate-btn:active {
+  background-color: #F5F5F5;
+  border-color: rgba(0, 0, 0, 0.2);
+  box-shadow: rgba(0, 0, 0, 0.06) 0 2px 4px;
+  transform: translateY(0);
+}
+  </style>
 </head>
-<body class="bg-gradient-to-br from-gray-50 to-gray-100">
 
-    <header class="bg-white border-b border-gray-100 sticky top-0 z-50 shadow-sm">
-        <nav class="container mx-auto px-6 py-5 flex justify-between items-center">
-            <a href="/" class="text-2xl font-bold text-green-600 flex items-center gap-2">
-                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                </svg>
-                CropHealth AI
-            </a>
-            <div class="hidden md:flex items-center space-x-8">
-                <a href="/scanner" class="text-gray-700 hover:text-green-600 font-medium transition">Disease Scanner</a>
-                <div id="google_translate_element" class="inline-block"></div>
-            </div>
-            <a href="/" class="bg-green-600 text-white font-semibold py-3 px-6 rounded-lg hover:bg-green-700 transition shadow-sm hover:shadow-md">Home</a>
-        </nav>
-    </header>
+<body class="bg-gray-50">
 
-    <main>
-        <section class="search-container py-16">
-            <div class="container mx-auto px-6">
-                <div class="text-center mb-10">
-                    <div class="inline-block mb-4 px-4 py-2 bg-white rounded-full shadow-sm">
-                        <span class="text-green-700 font-semibold text-sm">📚 Comprehensive Database</span>
-                    </div>
-                    <h1 class="text-5xl md:text-6xl font-black text-gray-900 mb-4">
-                        Disease <span class="gradient-text">Library</span>
-                    </h1>
-                    <p class="text-gray-600 text-lg md:text-xl max-w-3xl mx-auto leading-relaxed">
-                        Browse our visual database of 38 plant diseases. Learn to identify them and discover expert-backed prevention strategies.
-                    </p>
-                </div>
+  <nav class="fixed top-6 left-1/2 -translate-x-1/2 z-50 w-[95%] max-w-4xl">
+    <div class="bg-white/90 backdrop-blur-md shadow-xl border border-white/40 rounded-full p-2 pl-6 flex items-center justify-between">
 
-                <div class="max-w-2xl mx-auto">
-                    <div class="relative">
-                        <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                            <svg class="h-6 w-6 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                                <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd" />
-                            </svg>
-                        </div>
-                        <input id="searchInput" type="text" class="block w-full pl-12 pr-4 py-4 border-2 border-gray-200 rounded-xl leading-5 bg-white placeholder-gray-400 focus:outline-none focus:placeholder-gray-500 focus:ring-2 focus:ring-green-500 focus:border-transparent text-base shadow-sm" placeholder="Search for a disease or crop (e.g., 'Tomato' or 'Blight')">
-                    </div>
-                    <div class="mt-4 flex flex-wrap gap-2 justify-center">
-                        <button class="filter-btn px-4 py-2 bg-white text-gray-700 rounded-lg text-sm font-medium hover:bg-green-50 hover:text-green-700 transition shadow-sm" data-filter="">All</button>
-                        <button class="filter-btn px-4 py-2 bg-white text-gray-700 rounded-lg text-sm font-medium hover:bg-green-50 hover:text-green-700 transition shadow-sm" data-filter="healthy">Healthy</button>
-                        <button class="filter-btn px-4 py-2 bg-white text-gray-700 rounded-lg text-sm font-medium hover:bg-green-50 hover:text-green-700 transition shadow-sm" data-filter="tomato">Tomato</button>
-                        <button class="filter-btn px-4 py-2 bg-white text-gray-700 rounded-lg text-sm font-medium hover:bg-green-50 hover:text-green-700 transition shadow-sm" data-filter="apple">Apple</button>
-                        <button class="filter-btn px-4 py-2 bg-white text-gray-700 rounded-lg text-sm font-medium hover:bg-green-50 hover:text-green-700 transition shadow-sm" data-filter="grape">Grape</button>
-                        <button class="filter-btn px-4 py-2 bg-white text-gray-700 rounded-lg text-sm font-medium hover:bg-green-50 hover:text-green-700 transition shadow-sm" data-filter="corn">Corn</button>
-                    </div>
-                </div>
-            </div>
-        </section>
+      <a href="/" class="flex items-center gap-2 font-bold text-lg text-gray-800 hover:text-green-600 transition">
+        <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+        </svg>
+        <span class="hidden sm:inline">CropHealth</span>
+      </a>
 
-        <section class="container mx-auto px-6 py-12">
-            <div class="mb-6 flex justify-between items-center">
-                <p class="text-gray-600 font-medium">
-                    <span id="result-count">38</span> diseases found
-                </p>
-            </div>
+      <div class="flex items-center gap-2">
+        <a href="/" class="px-4 py-2 text-gray-700 font-medium hover:text-green-600 hover:bg-gray-100 rounded-full transition">Home</a>
+        <a href="/library" class="px-4 py-2 text-gray-700 font-medium hover:text-green-600 hover:bg-gray-100 rounded-full transition">Library</a>
+        <a href="/scanner" class="px-4 py-2 text-gray-700 font-medium hover:text-green-600 hover:bg-gray-100 rounded-full transition">Scanner</a>
+      </div>
 
-            <div id="disease-grid" class="grid-container">
-                </div>
-            
-            <div id="no-results" class="text-center py-20 hidden">
-                <svg class="mx-auto h-16 w-16 text-gray-400 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-                <p class="text-gray-500 text-xl font-medium">No diseases found matching your search</p>
-                <p class="text-gray-400 mt-2">Try adjusting your search terms</p>
-            </div>
-        </section>
-    </main>
+      <div class="flex items-center gap-3 relative">
 
-    <script>
-        const diseases = [
-            'Apple___Apple_scab', 'Apple___Black_rot', 'Apple___Cedar_apple_rust', 'Apple___healthy', 
-            'Blueberry___healthy', 'Cherry_(including_sour)___Powdery_mildew', 'Cherry_(including_sour)___healthy', 
-            'Corn_(maize)___Cercospora_leaf_spot Gray_leaf_spot', 'Corn_(maize)___Common_rust_', 
-            'Corn_(maize)___Northern_Leaf_Blight', 'Corn_(maize)___healthy', 'Grape___Black_rot', 
-            'Grape___Esca_(Black_Measles)', 'Grape___Leaf_blight_(Isariopsis_Leaf_Spot)', 'Grape___healthy', 
-            'Orange___Haunglongbing_(Citrus_greening)', 'Peach___Bacterial_spot', 'Peach___healthy', 
-            'Pepper,_bell___Bacterial_spot', 'Pepper,_bell___healthy', 'Potato___Early_blight', 
-            'Potato___Late_blight', 'Potato___healthy', 'Raspberry___healthy', 'Soybean___healthy', 
-            'Squash___Powdery_mildew', 'Strawberry___Leaf_scorch', 'Strawberry___healthy', 
-            'Tomato___Bacterial_spot', 'Tomato___Early_blight', 'Tomato___Late_blight', 'Tomato___Leaf_Mold', 
-            'Tomato___Septoria_leaf_spot', 'Tomato___Spider_mites Two-spotted_spider_mite', 
-            'Tomato___Target_Spot', 'Tomato___Tomato_Yellow_Leaf_Curl_Virus', 'Tomato___Tomato_mosaic_virus', 
-            'Tomato___healthy'
-        ];
+        <!-- Translator Button -->
+        <button id="translate-btn" class="p-2 rounded-full hover:bg-gray-100 transition">
+          Change Language
+        </button>
 
-        const diseaseGrid = document.getElementById('disease-grid');
-        const searchInput = document.getElementById('searchInput');
-        const noResults = document.getElementById('no-results');
-        const resultCount = document.getElementById('result-count');
-        const filterBtns = document.querySelectorAll('.filter-btn');
+        <!-- Translate Box -->
+        <div id="google_translate_element" class="hidden absolute right-0 top-14 bg-white p-4 rounded-xl shadow-xl border min-w-[220px]"></div>
 
-        function formatDiseaseName(name) {
-            return name.replace(/___/g, ' - ').replace(/_/g, ' ');
-        }
+        <a href="/scanner" class="hidden md:block bg-gray-900 text-white px-5 py-2.5 rounded-full font-bold shadow hover:bg-green-600 transition">Start AI</a>
+      </div>
+    </div>
+  </nav>
+
+  <section class="relative pt-36 pb-24 lg:pt-48">
+    <div class="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full pointer-events-none">
+      <div class="absolute top-[-10%] left-[20%] w-[420px] h-[420px] bg-green-300 rounded-full blur-[130px] opacity-40"></div>
+      <div class="absolute top-[15%] right-[25%] w-[350px] h-[350px] bg-emerald-200 rounded-full blur-[130px] opacity-40"></div>
+    </div>
+
+    <div class="container mx-auto max-w-5xl px-6 relative z-10 text-center">
+      <div class="inline-block mb-4 px-4 py-1.5 bg-green-100 text-green-700 rounded-full font-semibold text-sm border border-green-200">
+        📚 Disease Knowledge Base
+      </div>
+
+      <h1 class="text-5xl md:text-6xl font-black mb-4">
+        Explore the <span class="text-transparent bg-clip-text bg-gradient-to-r from-green-600 to-emerald-500">Plant Library</span>
+      </h1>
+
+      <p class="text-gray-600 text-lg md:text-xl max-w-2xl mx-auto leading-relaxed">
+        Browse all 38 crop diseases with images, symptoms, and early detection markers.
+      </p>
+    </div>
+  </section>
+
+  <section class="px-6 pb-10">
+    <div class="max-w-3xl mx-auto">
+
+      <div class="relative">
+        <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+          <svg class="h-6 w-6 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"/>
+          </svg>
+        </div>
+
+        <input id="searchInput" type="text"
+               class="block w-full pl-12 pr-4 py-4 border-2 border-gray-200 rounded-2xl bg-white focus:ring-2 focus:ring-green-500 focus:border-transparent shadow-sm"
+               placeholder="Search disease or crop (e.g., 'Tomato', 'Blight')">
+      </div>
+
+      <div class="mt-4 flex flex-wrap gap-2 justify-center">
+        <button class="filter-btn px-4 py-2 bg-white text-gray-700 rounded-lg shadow hover:bg-green-50" data-filter="">All</button>
+        <button class="filter-btn px-4 py-2 bg-white text-gray-700 rounded-lg shadow hover:bg-green-50" data-filter="healthy">Healthy</button>
+        <button class="filter-btn px-4 py-2 bg-white text-gray-700 rounded-lg shadow hover:bg-green-50" data-filter="tomato">Tomato</button>
+        <button class="filter-btn px-4 py-2 bg-white text-gray-700 rounded-lg shadow hover:bg-green-50" data-filter="apple">Apple</button>
+        <button class="filter-btn px-4 py-2 bg-white text-gray-700 rounded-lg shadow hover:bg-green-50" data-filter="grape">Grape</button>
+        <button class="filter-btn px-4 py-2 bg-white text-gray-700 rounded-lg shadow hover:bg-green-50" data-filter="corn">Corn</button>
+      </div>
+
+    </div>
+  </section>
+
+  <section class="container mx-auto px-6 pb-24">
+    <p class="text-gray-600 font-medium mb-5">
+      <span id="result-count">38</span> results
+    </p>
+
+    <div id="disease-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8"></div>
+
+    <div id="no-results" class="text-center py-20 hidden">
+      <p class="text-gray-500 text-xl font-medium">No results found</p>
+      <p class="text-gray-400 mt-2">Try another keyword</p>
+    </div>
+  </section>
+
+  <script>
+    const diseases = [
+      "Apple___Apple_scab","Apple___Black_rot","Apple___Cedar_apple_rust","Apple___healthy",
+      "Blueberry___healthy","Cherry_(including_sour)___Powdery_mildew","Cherry_(including_sour)___healthy",
+      "Corn_(maize)___Cercospora_leaf_spot Gray_leaf_spot","Corn_(maize)___Common_rust_","Corn_(maize)___Northern_Leaf_Blight","Corn_(maize)___healthy",
+      "Grape___Black_rot","Grape___Esca_(Black_Measles)","Grape___Leaf_blight_(Isariopsis_Leaf_Spot)","Grape___healthy",
+      "Orange___Haunglongbing_(Citrus_greening)","Peach___Bacterial_spot","Peach___healthy",
+      "Pepper,_bell___Bacterial_spot","Pepper,_bell___healthy","Potato___Early_blight","Potato___Late_blight","Potato___healthy",
+      "Raspberry___healthy","Soybean___healthy","Squash___Powdery_mildew","Strawberry___Leaf_scorch","Strawberry___healthy",
+      "Tomato___Bacterial_spot","Tomato___Early_blight","Tomato___Late_blight","Tomato___Leaf_Mold",
+      "Tomato___Septoria_leaf_spot","Tomato___Spider_mites Two-spotted_spider_mite","Tomato___Target_Spot",
+      "Tomato___Tomato_Yellow_Leaf_Curl_Virus","Tomato___Tomato_mosaic_virus","Tomato___healthy"
+    ];
+
+    const grid = document.getElementById("disease-grid");
+    const search = document.getElementById("searchInput");
+    const resultCount = document.getElementById("result-count");
+    const noResults = document.getElementById("no-results");
+    const buttons = document.querySelectorAll(".filter-btn");
+
+    function formatName(x){
+      return x.replace(/___/g," - ").replace(/_/g," ");
+    }
+    
 
         function createFileName(name) {
             return name.toLowerCase()
@@ -234,85 +237,95 @@
                 .replace(/,-/g, '-');
         }
 
-        function isHealthy(name) {
-            return name.toLowerCase().includes('healthy');
-        }
+    function isHealthy(x){ return x.toLowerCase().includes("healthy"); }
+    function crop(x){ return x.split("___")[0].replace(/_/g, " "); }
 
-        function getCropName(name) {
-            return name.split('___')[0].replace(/_/g, ' ');
-        }
+    function render(filter=""){
+      grid.innerHTML = "";
+      const filtered = diseases.filter(x => x.toLowerCase().includes(filter.toLowerCase()));
 
-        function renderDiseases(filter = '') {
-            diseaseGrid.innerHTML = '';
-            const filteredDiseases = diseases.filter(d => d.toLowerCase().includes(filter.toLowerCase()));
+      resultCount.textContent = filtered.length;
 
-            resultCount.textContent = filteredDiseases.length;
+      if(filtered.length === 0){
+        noResults.classList.remove("hidden");
+        grid.classList.add("hidden");
+      } else {
+        noResults.classList.add("hidden");
+        grid.classList.remove("hidden");
+      }
 
-            if (filteredDiseases.length === 0) {
-                noResults.classList.remove('hidden');
-                diseaseGrid.classList.add('hidden');
-            } else {
-                noResults.classList.add('hidden');
-                diseaseGrid.classList.remove('hidden');
-            }
+      filtered.forEach(d=>{
+        const display = formatName(d);
+        const file = createFileName(d);
+        const src = `/assets/library_images/${file}.jpg`;
 
-            filteredDiseases.forEach(disease => {
-                const displayName = formatDiseaseName(disease);
-                const fileName = createFileName(disease);
-                const imagePath = `/assets/library_images/${fileName}.jpg`;
-                const healthy = isHealthy(disease);
-                const cropName = getCropName(disease);
+        grid.innerHTML += `
+          <div class="disease-card bg-white rounded-2xl shadow">
+            <div class="relative h-56 overflow-hidden">
+              <img src="${src}" class="w-full h-full object-cover"
+                onerror="this.src='https://placehold.co/400x300/DCFCE7/166534?text=No+Image'">
+              <div class="absolute top-3 right-3">
+                <span class="tag ${isHealthy(d) ? 'tag-healthy' : 'tag-disease'}">
+                  ${isHealthy(d) ? 'Healthy' : 'Disease'}
+                </span>
+              </div>
+            </div>
+            <div class="p-5">
+              <p class="text-sm text-green-600 font-semibold">${crop(d)}</p>
+              <h3 class="text-lg font-bold text-gray-900 leading-tight">${display}</h3>
+            </div>
+          </div>
+        `;
+      });
+    }
 
-                const card = `
-                    <div class="disease-card bg-white rounded-xl shadow-md overflow-hidden">
-                        <div class="relative overflow-hidden h-56">
-                            <img src="${imagePath}" alt="${displayName}" class="h-full w-full object-cover" onerror="this.src='https://placehold.co/400x300/e0e7ff/4f46e5?text=No+Image'">
-                            <div class="absolute top-3 right-3">
-                                <span class="tag ${healthy ? 'tag-healthy' : 'tag-disease'}">${healthy ? 'Healthy' : 'Disease'}</span>
-                            </div>
-                        </div>
-                        <div class="p-5">
-                            <p class="text-sm text-green-600 font-semibold mb-1">${cropName}</p>
-                            <h3 class="text-lg font-bold text-gray-900 leading-tight">${displayName}</h3>
-                        </div>
-                    </div>
-                `;
-                diseaseGrid.innerHTML += card;
-            });
-        }
+    buttons.forEach(btn=>{
+      btn.addEventListener("click",()=>{
+        const filter = btn.dataset.filter;
+        search.value = filter;
+        render(filter);
 
-        searchInput.addEventListener('input', (e) => {
-            renderDiseases(e.target.value);
+        buttons.forEach(b=>{
+          b.classList.remove("bg-green-100","text-green-700","border","border-green-300");
+          b.classList.add("bg-white","text-gray-700");
         });
 
-        filterBtns.forEach(btn => {
-            btn.addEventListener('click', () => {
-                const filter = btn.dataset.filter;
-                searchInput.value = filter;
-                renderDiseases(filter);
-                
-                // Update active state
-                filterBtns.forEach(b => b.classList.remove('bg-green-600', 'text-white'));
-                filterBtns.forEach(b => b.classList.add('bg-white', 'text-gray-700'));
-                btn.classList.remove('bg-white', 'text-gray-700');
-                btn.classList.add('bg-green-600', 'text-white');
-            });
-        });
+        btn.classList.remove("bg-white","text-gray-700");
+        btn.classList.add("bg-green-100","text-green-700","border","border-green-300");
+      });
+    });
 
-        // Initial render
-        renderDiseases();
-    </script>
+    search.addEventListener("input", e => render(e.target.value));
 
-    <script type="text/javascript">
-        function googleTranslateElementInit() {
-            new google.translate.TranslateElement({
-                pageLanguage: 'en',
-                includedLanguages: 'en,hi,mr,bn,te,ta,gu,kn,ml,pa,ur,es,fr,de,zh-CN,ar',
-                layout: google.translate.TranslateElement.InlineLayout.SIMPLE,
-                autoDisplay: false
-            }, 'google_translate_element');
-        }
-    </script>
-    <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+    render();
+  </script>
+
+  <script>
+    function googleTranslateElementInit() {
+      new google.translate.TranslateElement({
+        pageLanguage: 'en',
+        includedLanguages: 'en,hi,mr,bn,ta,te,gu,kn,ml,pa,ur,es,fr,de,zh-CN,ar',
+        layout: google.translate.TranslateElement.InlineLayout.VERTICAL
+      }, 'google_translate_element');
+    }
+  </script>
+  <script src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+
+  <script>
+    const tBtn = document.getElementById("translate-btn");
+    const tMenu = document.getElementById("google_translate_element");
+
+    tBtn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      tMenu.classList.toggle("hidden");
+    });
+
+    document.addEventListener("click", (e) => {
+      if (!tMenu.contains(e.target) && !tBtn.contains(e.target)) {
+        tMenu.classList.add("hidden");
+      }
+    });
+  </script>
+
 </body>
 </html>
