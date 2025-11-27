@@ -11,7 +11,7 @@ app = Flask(__name__, static_folder='assets', static_url_path='/assets')
 
 # --- 1. SETUP GEMINI (REST API) ---
 # 👇 PASTE YOUR KEY HERE 👇
-GEMINI_API_KEY = "PASTE YOUR KEY HERE" 
+GEMINI_API_KEY = "PASTE YOUR KEY HERE " 
 GEMINI_URL = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key={GEMINI_API_KEY}"
 
 # --- 2. LOAD RESNET50 MODEL ---
