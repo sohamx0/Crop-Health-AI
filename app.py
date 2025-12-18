@@ -9,12 +9,10 @@ import os
 
 app = Flask(__name__, static_folder='assets', static_url_path='/assets')
 
-# --- 1. SETUP GEMINI (REST API) ---
-# 👇 PASTE YOUR KEY HERE 👇
-GEMINI_API_KEY = "PASTE YOUR KEY HERE " 
+
+GEMINI_API_KEY = "AIzaSyCYjX5eOQrv3cPAaG1Fxs-kFj1MzK75Wco" 
 GEMINI_URL = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key={GEMINI_API_KEY}"
 
-# --- 2. LOAD RESNET50 MODEL ---
 try:
     disease_model = load_model('plant_disease_model.h5')
     DISEASE_CLASS_NAMES = sorted(['Apple___Apple_scab', 'Apple___Black_rot', 'Apple___Cedar_apple_rust', 'Apple___healthy', 'Blueberry___healthy', 'Cherry_(including_sour)___Powdery_mildew', 'Cherry_(including_sour)___healthy', 'Corn_(maize)___Cercospora_leaf_spot Gray_leaf_spot', 'Corn_(maize)___Common_rust_', 'Corn_(maize)___Northern_Leaf_Blight', 'Corn_(maize)___healthy', 'Grape___Black_rot', 'Grape___Esca_(Black_Measles)', 'Grape___Leaf_blight_(Isariopsis_Leaf_Spot)', 'Grape___healthy', 'Orange___Haunglongbing_(Citrus_greening)', 'Peach___Bacterial_spot', 'Peach___healthy', 'Pepper,_bell___Bacterial_spot', 'Pepper,_bell___healthy', 'Potato___Early_blight', 'Potato___Late_blight', 'Potato___healthy', 'Raspberry___healthy', 'Soybean___healthy', 'Squash___Powdery_mildew', 'Strawberry___Leaf_scorch', 'Strawberry___healthy', 'Tomato___Bacterial_spot', 'Tomato___Early_blight', 'Tomato___Late_blight', 'Tomato___Leaf_Mold', 'Tomato___Septoria_leaf_spot', 'Tomato___Spider_mites Two-spotted_spider_mite', 'Tomato___Target_Spot', 'Tomato___Tomato_Yellow_Leaf_Curl_Virus', 'Tomato___Tomato_mosaic_virus', 'Tomato___healthy'])
@@ -24,7 +22,6 @@ except Exception as e:
     disease_model = None
 
 
-# --- 3. GEMINI HELPER FUNCTION ---
 def ask_gemini(prompt_text):
     payload = { "contents": [{ "parts": [{"text": prompt_text}] }] }
     try:
@@ -45,13 +42,11 @@ def get_fertilizer_recommendation(plant_name, disease_name, is_healthy, lat, lon
     return ask_gemini(prompt)
 
 
-# --- NEW ROUTE: CHATBOT ---
 @app.route('/chat', methods=['POST'])
 def chat_route():
     user_message = request.json.get('message')
     if not user_message: return jsonify({'reply': "Please say something!"})
     
-    # Chatbot Persona Prompt
     prompt = f"""
     You are 'CropHealth Bot', a friendly AI farming assistant.
     User Question: "{user_message}"
@@ -66,7 +61,6 @@ def chat_route():
     return jsonify({'reply': reply})
 
 
-# --- API Prediction Route ---
 @app.route('/predict_disease', methods=['POST'])
 def predict_disease_route():
     if 'file' not in request.files: return jsonify({'error': 'No file part'}), 400
@@ -108,7 +102,6 @@ def predict_disease_route():
         return jsonify({'error': f'Analysis failed: {e}'}), 500
 
 
-# --- Other Routes ---
 @app.route('/')
 def home(): return render_template('index.html')
 @app.route('/scanner')

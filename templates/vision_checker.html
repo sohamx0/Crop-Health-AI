@@ -10,20 +10,68 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet"/>
 
   <style>
-    body { font-family: 'Inter', sans-serif; color: #111827; }
+    body { 
+      font-family: 'Inter', sans-serif; 
+      color: #111827;
+      background: linear-gradient(135deg, #f0fdf4 0%, #ffffff 50%, #ecfdf5 100%);
+    }
+
+    ::-webkit-scrollbar { width: 10px; height: 10px; }
+    ::-webkit-scrollbar-track { background: #f1f5f9; border-radius: 10px; }
+    ::-webkit-scrollbar-thumb { 
+      background: linear-gradient(135deg, #16a34a, #059669); 
+      border-radius: 10px; 
+      border: 2px solid #f1f5f9;
+    }
+    ::-webkit-scrollbar-thumb:hover { background: linear-gradient(135deg, #059669, #047857); }
     
-    /* Animations */
     .animate-fade-in { animation: fadeIn 0.5s cubic-bezier(0.4, 0, 0.2, 1) forwards; }
     @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-    .chat-enter { animation: slideUp 0.3s ease-out forwards; }
-    @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-
-    .gradient-text { background: linear-gradient(135deg, #16a34a 0%, #059669 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
     
-    .upload-area-hover { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
-    .upload-area-hover:hover { border-color: #16a34a; background-color: #f0fdf4; transform: translateY(-2px); }
+    .chat-enter { animation: slideUp 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55); }
+    @keyframes slideUp { 
+      from { opacity: 0; transform: translateY(30px) scale(0.9);} 
+      to { opacity: 1; transform: translateY(0) scale(1);} 
+    }
 
-    /* GOOGLE TRANSLATE FIXES */
+    .gradient-text { 
+      background: linear-gradient(90deg, #16a34a, #059669, #10b981, #16a34a);
+      background-size: 200% auto;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: gradient-flow 3s linear infinite;
+    }
+    
+    @keyframes gradient-flow {
+      0% { background-position: 0% center; }
+      100% { background-position: 200% center; }
+    }
+    
+    .upload-area-hover { 
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .upload-area-hover::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+      transition: left 0.5s;
+    }
+    
+    .upload-area-hover:hover::before { left: 100%; }
+    .upload-area-hover:hover { 
+      border-color: #16a34a; 
+      background-color: #f0fdf4; 
+      transform: translateY(-4px);
+      box-shadow: 0 12px 24px rgba(22, 163, 74, 0.15);
+    }
+
     .goog-te-banner-frame { display: none !important; }
     body { top: 0 !important; }
     .goog-logo-link, .goog-te-gadget span { display: none !important; }
@@ -32,58 +80,58 @@
     .goog-te-combo {
       display: block !important;
       width: 100% !important;
-      height: 40px !important;
+      height: 42px !important;
       color: #374151 !important; 
       background-color: #ffffff !important;
-      border: 1px solid #e5e7eb !important;
-      border-radius: 8px !important;
-      padding: 0 12px !important;
+      border: 2px solid #e5e7eb !important;
+      border-radius: 12px !important;
+      padding: 0 14px !important;
       font-size: 14px !important;
-      font-weight: 500 !important;
+      font-weight: 600 !important;
       font-family: 'Inter', sans-serif !important;
       outline: none !important;
       cursor: pointer !important;
       box-sizing: border-box !important;
+      transition: all 0.3s !important;
     }
 
-    /* ensure dropdown always shows */
+    .goog-te-combo:hover {
+      border-color: #16a34a !important;
+      box-shadow: 0 0 0 3px rgba(22, 163, 74, 0.1) !important;
+    }
+
     .goog-te-menu-frame { z-index: 999999 !important; }
 
-    /* translate button */
     #translate-btn {
-      background-color: #FFFFFF;
-      border: 1px solid rgba(0,0,0,0.12);
-      border-radius: 9999px;
-      padding: 10px 22px;
-      font-size: 16px;
-      font-weight: 600;
-      color: rgba(0,0,0,0.85);
+      background: linear-gradient(135deg, #ffffff, #f9fafb);
+      border: 2px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 10px 24px;
+      font-size: 15px;
+      font-weight: 700;
       cursor: pointer;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      box-shadow: rgba(0,0,0,0.03) 0 1px 3px;
-      transition: all 250ms ease;
+      transition: all .3s;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
     }
 
-    #translate-btn:hover { border-color: rgba(0,0,0,0.2); box-shadow: rgba(0,0,0,0.1) 0 4px 12px; transform: translateY(-1px); }
+    #translate-btn:hover { 
+      border-color: #16a34a; 
+      box-shadow: 0 4px 12px rgba(22, 163, 74, 0.15);
+      transform: translateY(-2px);
+    }
 
-    #translate-btn:active { background:#F5F5F5; transform: translateY(0); }
-
-
-    /* remove nav shaking */
     #main-nav {
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
       will-change: opacity;
     }
 
-    /* NAV LINKS — remove width transitions */
     nav .nav-links {
       display:flex;
       gap:.5rem;
       overflow-x:auto;
       white-space:nowrap;
       padding:6px;
-      transition: opacity .25s ease; /* only fade opacity — no jitter */
+      transition: opacity .25s ease;
       cursor:grab;
     }
     nav .nav-links:active { cursor:grabbing; }
@@ -93,22 +141,76 @@
       pointer-events:none;
     }
 
-    nav.nav-compact a.logo-badge::after {
+    nav.nav-compact .logo-badge::after {
       content:"";
       position:absolute;
-      right:-4px; top:-6px;
-      width:14px; height:14px;
-      background:#10b981;
-      border-radius:999px;
-      border:2px solid #fff;
-      box-shadow:0 2px 6px rgba(16,185,129,0.2);
+      right:-4px; 
+      top:-6px;
+      width:14px; 
+      height:14px;
+      background: linear-gradient(135deg, #10b981, #059669);
+      border-radius:50%;
+      border:3px solid white;
+      box-shadow:0 2px 8px rgba(16,185,129,0.4);
+      animation: dotPulse 2s infinite;
+    }
+
+    @keyframes dotPulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.1); }
     }
 
     nav .controls { display:flex; gap:.5rem; align-items:center; }
 
-    a.logo-badge { position:relative; display:inline-flex; align-items:center; gap:.5rem; }
+    .logo-badge { position:relative; display:inline-flex; align-items:center; gap:.5rem; }
 
-    /* mobile fixes */
+    .nav-link {
+      position: relative;
+      transition: all 0.3s;
+    }
+    .nav-link::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      width: 0;
+      height: 3px;
+      background: linear-gradient(90deg, #16a34a, #059669);
+      transition: all 0.3s;
+      transform: translateX(-50%);
+      border-radius: 10px;
+    }
+    .nav-link:hover::after {
+      width: 80%;
+    }
+
+    .glass {
+      background: rgba(255, 255, 255, 0.7);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.5);
+    }
+
+    .icon-float {
+      animation: iconFloat 3s ease-in-out infinite;
+    }
+    @keyframes iconFloat {
+      0%, 100% { transform: translateY(0px) rotate(0deg); }
+      50% { transform: translateY(-5px) rotate(5deg); }
+    }
+
+    #chat-window {
+      backdrop-filter: blur(10px);
+      background: rgba(255, 255, 255, 0.98);
+    }
+
+    .chat-message {
+      animation: messageSlide 0.3s ease-out;
+    }
+    @keyframes messageSlide {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
     @media(max-width:900px){
       nav .nav-links a { padding:8px 14px; font-size:.95rem; }
     }
@@ -119,35 +221,41 @@
     }
 
     @media(max-width:500px){
-      nav .bg-white\/90 { padding:0.4rem 1rem !important; }
-      nav span.hidden.sm\:inline { display:none !important; }
+      nav .glass { padding:0.4rem 1rem !important; }
+    }
+
+    @media (max-width: 420px) {
+      #chat-window { width: 92vw !important; height: 70vh !important; right: 4vw !important; }
+      #chat-input { font-size: .85rem; }
     }
   </style>
 </head>
 
+<body>
 
-<body class="bg-gray-50">
+  <nav id="main-nav" class="fixed top-6 left-1/2 -translate-x-1/2 z-50 w-[95%] max-w-5xl">
+    <div class="glass shadow-2xl rounded-[24px] p-3 pl-7 flex items-center justify-between">
 
-  <!-- NAV -->
-  <nav class="fixed top-6 left-1/2 transform -translate-x-1/2 z-50 w-[95%] max-w-4xl" id="main-nav">
-    <div class="bg-white/90 backdrop-blur-md border border-white/40 shadow-2xl rounded-full p-2 pl-6 flex items-center justify-between">
-
-      <a id="logo-btn" href="/" class="logo-badge flex items-center gap-2 font-bold text-lg text-gray-800 hover:text-green-600 transition mr-4">
-        <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-        <span class="hidden sm:inline tracking-tight"></span>
+      <a id="logo-btn" href="/" class="logo-badge flex items-center gap-3 font-black text-xl text-gray-800 hover:text-green-600 transition-all mr-4">
+        <svg class="w-7 h-7 text-green-600 icon-float" fill="none" stroke="currentColor" stroke-width="2.5"
+             stroke-linecap="round" stroke-linejoin="round"> 
+          <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+        </svg>
       </a>
 
       <div class="nav-links">
-        <a href="/" class="px-4 py-2 text-gray-600 font-medium hover:text-green-600 transition rounded-full hover:bg-gray-100">Home</a>
-        <a href="/library" class="px-4 py-2 text-gray-600 font-medium hover:text-green-600 transition rounded-full hover:bg-gray-100">Library</a>
-        <a href="/scanner" class="px-5 py-2 rounded-full font-semibold bg-[#d9fce7] text-green-700">Scanner</a> 
+        <a href="/" class="nav-link px-5 py-2.5 text-gray-700 hover:text-green-600 font-semibold rounded-full hover:bg-white/70">Home</a>
+        <a href="/library" class="nav-link px-5 py-2.5 text-gray-700 hover:text-green-600 font-semibold rounded-full hover:bg-white/70">Library</a>
+        <a href="/scanner" class="px-6 py-2.5 rounded-full font-bold bg-gradient-to-r from-green-500 to-emerald-500 text-white shadow-lg shadow-green-500/30">Scanner</a>
       </div>
 
-      <div class="controls ml-4 relative">
-        <button id="translate-btn">Change Language</button>
-        <div id="google_translate_element" class="hidden absolute right-0 top-14 p-3 bg-white rounded-xl shadow-2xl border border-gray-100 z-50 min-w-[200px]"></div>
+      <div class="controls ml-4 relative flex items-center gap-3">
+        <button id="translate-btn">Language</button>
+        <div id="google_translate_element" class="hidden absolute right-0 top-16 p-4 bg-white rounded-2xl shadow-2xl border-2 border-gray-100 min-w-[220px] z-50"></div>
 
-        <a href="/scanner" class="bg-gray-900 text-white px-5 py-2.5 rounded-full font-bold hover:bg-green-600 hidden md:inline-block">Start AI</a>
+        <a href="/scanner" class="bg-gradient-to-r from-gray-900 to-gray-800 text-white px-6 py-3 rounded-full font-bold hover:from-green-600 hover:to-green-500 hidden md:inline-block shadow-lg hover:shadow-xl transition-all hover:scale-105">
+          Start AI →
+        </a>
       </div>
 
     </div>
@@ -156,31 +264,41 @@
   <main class="container mx-auto px-4 py-32 lg:py-40">
     <div class="max-w-2xl mx-auto">
         <div class="text-center mb-8 animate-fade-in">
-            <div class="inline-block mb-4 px-4 py-2 bg-white rounded-full shadow-sm">
-                <span class="text-green-700 font-semibold text-sm">🔬 AI-Powered Analysis</span>
+            <div class="inline-flex items-center gap-2 mb-6 px-5 py-2 glass rounded-full font-bold text-sm border-2 border-green-200 shadow-lg">
+                <span class="text-2xl">🔬</span>
+                <span class="bg-gradient-to-r from-green-600 to-emerald-600 bg-clip-text text-transparent">AI-Powered Analysis</span>
             </div>
             <h1 class="text-4xl md:text-5xl font-black text-gray-900 mb-3">AI Plant <span class="gradient-text">Doctor</span></h1>
-            <p class="text-gray-600 text-lg">Upload a leaf photo for instant, location-aware diagnosis</p>
+            <p class="text-gray-600 text-xl leading-relaxed">Upload a leaf photo for instant, location-aware diagnosis</p>
         </div>
 
-        <div id="upload-section" class="bg-white p-8 md:p-10 rounded-2xl shadow-xl animate-fade-in">
-            <div id="uploadArea" class="upload-area-hover border-2 border-dashed border-gray-300 rounded-xl p-12 cursor-pointer text-center">
+        <div id="upload-section" class="glass p-8 md:p-10 rounded-3xl shadow-2xl animate-fade-in border-2 border-white">
+            <div id="uploadArea" class="upload-area-hover border-2 border-dashed border-gray-300 rounded-2xl p-12 cursor-pointer text-center">
                 <input type="file" id="fileInput" class="hidden" accept="image/*">
                 <div class="flex flex-col items-center">
                     <div class="relative mb-4">
-                        <div class="absolute inset-0 bg-green-400 rounded-full blur-xl opacity-20 pulse-ring"></div>
-                        <div class="relative bg-green-50 p-4 rounded-full">
-                            <svg class="h-12 w-12 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" /></svg>
+                        <div class="absolute inset-0 bg-green-400 rounded-full blur-xl opacity-20"></div>
+                        <div class="relative bg-gradient-to-br from-green-50 to-emerald-50 p-5 rounded-2xl shadow-lg">
+                            <svg class="h-14 w-14 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" /></svg>
                         </div>
                     </div>
-                    <p class="text-base font-semibold text-gray-700 mb-1">Click to upload or drag & drop</p>
-                    <p class="text-sm text-gray-500">PNG, JPG, or JPEG (max 10MB)</p>
+                    <p class="text-lg font-bold text-gray-800 mb-2">Click to upload or drag & drop</p>
+                    <p class="text-sm text-gray-500 font-medium">PNG, JPG, or JPEG (max 10MB)</p>
                 </div>
             </div>
-            <div class="mt-6 grid grid-cols-3 gap-4 text-center">
-                <div class="p-3 bg-gray-50 rounded-lg"><div class="text-2xl mb-1">⚡</div><p class="text-xs font-medium text-gray-600">Instant</p></div>
-                <div class="p-3 bg-gray-50 rounded-lg"><div class="text-2xl mb-1">📍</div><p class="text-xs font-medium text-gray-600">Local</p></div>
-                <div class="p-3 bg-gray-50 rounded-lg"><div class="text-2xl mb-1">🎯</div><p class="text-xs font-medium text-gray-600">96% Acc.</p></div>
+            <div class="mt-8 grid grid-cols-3 gap-4 text-center">
+                <div class="p-4 glass rounded-2xl border-2 border-white shadow-md hover:shadow-lg transition-all">
+                    <div class="text-3xl mb-2">⚡</div>
+                    <p class="text-sm font-bold text-gray-700">Instant</p>
+                </div>
+                <div class="p-4 glass rounded-2xl border-2 border-white shadow-md hover:shadow-lg transition-all">
+                    <div class="text-3xl mb-2">📍</div>
+                    <p class="text-sm font-bold text-gray-700">Local</p>
+                </div>
+                <div class="p-4 glass rounded-2xl border-2 border-white shadow-md hover:shadow-lg transition-all">
+                    <div class="text-3xl mb-2">🎯</div>
+                    <p class="text-sm font-bold text-gray-700">98% Acc.</p>
+                </div>
             </div>
         </div>
         
@@ -188,27 +306,35 @@
     </div>
   </main>
 
-  <div class="fixed bottom-4 right-4 z-50 flex flex-col items-end">
-    <div id="chat-window" class="hidden bg-white w-[90vw] sm:w-96 h-[60vh] sm:h-[500px] rounded-2xl shadow-2xl border border-gray-200 flex flex-col mb-4 overflow-hidden chat-enter origin-bottom-right">
-        <div class="bg-green-600 p-4 text-white font-bold flex justify-between items-center shadow-md flex-shrink-0">
-            <div class="flex items-center gap-2"><span>🌱 CropHealth Bot</span><span class="text-xs bg-green-500 px-2 py-0.5 rounded-full">Online</span></div>
-            <button onclick="toggleChat()" class="text-green-100 hover:text-white font-bold text-xl px-2">✕</button>
+  <div class="fixed bottom-6 right-6 z-50 flex flex-col items-end">
+    <div id="chat-window" class="hidden w-96 h-[520px] rounded-3xl shadow-2xl border-2 border-gray-200 flex flex-col mb-4 overflow-hidden chat-enter">
+        <div class="bg-gradient-to-r from-green-600 to-emerald-600 p-5 text-white font-bold flex justify-between items-center shadow-lg">
+            <div class="flex items-center gap-3">
+                <div class="w-3 h-3 bg-green-300 rounded-full animate-pulse"></div>
+                <span class="text-lg">🌱 CropHealth Assistant</span>
+            </div>
+            <button onclick="toggleChat()" class="text-white text-2xl hover:bg-white/20 w-8 h-8 rounded-full transition-all">✕</button>
         </div>
-        <div id="chat-messages" class="flex-1 min-h-0 p-4 overflow-y-auto space-y-4 bg-gray-50 overscroll-y-contain">
-            <div class="flex justify-start"><div class="bg-white p-3.5 rounded-2xl rounded-tl-none shadow-sm text-sm text-gray-700 border border-gray-100">Hello! I'm your farming assistant. Ask me about crops, fertilizers, or diseases! 🌾</div></div>
+        <div id="chat-messages" class="flex-1 min-h-0 p-5 overflow-y-auto space-y-4 overscroll-y-contain" style="background: linear-gradient(to bottom, #f9fafb, #ffffff);">
+            <div class="flex justify-start chat-message">
+                <div class="glass p-4 rounded-2xl rounded-tl-none shadow-md text-sm text-gray-800 border-2 border-green-100 max-w-[85%]">
+                    <strong>Hello! 👋</strong><br>I'm your AI farming assistant. How can I help you grow better today? 🌱
+                </div>
+            </div>
         </div>
-        <div class="p-3 bg-white border-t flex gap-2 items-center flex-shrink-0">
-            <input type="text" id="chat-input" class="flex-1 border border-gray-300 rounded-full px-4 py-2.5 text-sm focus:outline-none focus:border-green-500" placeholder="Ask a question..." onkeypress="if(event.key==='Enter') sendMessage()">
-            <button onclick="sendMessage()" class="bg-green-600 text-white p-2.5 rounded-full hover:bg-green-700 transition shadow-md active:scale-95"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/></svg></button>
+        <div class="p-4 bg-white border-t-2 flex gap-3 items-center">
+            <input type="text" id="chat-input" class="flex-1 border-2 rounded-2xl px-5 py-3 text-sm font-medium focus:outline-none focus:border-green-500 focus:ring-4 focus:ring-green-500/20 transition-all" placeholder="Ask anything about farming..." onkeypress="if(event.key==='Enter') sendMessage()">
+            <button onclick="sendMessage()" class="bg-gradient-to-r from-green-600 to-emerald-600 text-white p-3 rounded-2xl shadow-lg hover:shadow-xl hover:scale-105 transition-all">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/></svg>
+            </button>
         </div>
     </div>
-    <button onclick="toggleChat()" class="bg-green-600 text-white p-4 rounded-full shadow-2xl hover:bg-green-700 transition transform hover:scale-110 active:scale-95 border-4 border-white">
-        <img src="/assets/library_images/Chat-EDi.png" class="w-7 h-7 object-contain" alt="chatbot icon">
+    <button onclick="toggleChat()" class="bg-gradient-to-r from-green-600 to-emerald-600 text-white p-5 rounded-full shadow-2xl hover:shadow-green-500/50 border-4 border-white transition-all hover:scale-110">
+        <img src="/assets/library_images/Chat-EDi.png" class="w-8 h-8 object-contain" alt="chatbot icon">
     </button>
   </div>
 
   <script>
-    // --- UPLOAD & SCANNER LOGIC (RESTORED) ---
     const uploadArea = document.getElementById('uploadArea');
     const fileInput = document.getElementById('fileInput');
     const resultContainer = document.getElementById('result-container');
@@ -223,7 +349,7 @@
 
     function handleFile(file) {
         if (!file) return;
-        resultContainer.innerHTML = `<div id="loader" class="animate-fade-in"><div class="bg-white p-8 rounded-2xl shadow-lg text-center"><div class="inline-block p-4 bg-green-50 rounded-full mb-4"><svg class="animate-spin h-10 w-10 text-green-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg></div><p class="text-lg font-semibold text-gray-800">Getting your location...</p></div></div>`;
+        resultContainer.innerHTML = `<div id="loader" class="animate-fade-in"><div class="glass border-2 border-white p-10 rounded-3xl shadow-2xl text-center"><div class="inline-block p-5 bg-gradient-to-br from-green-50 to-emerald-50 rounded-2xl mb-6 shadow-lg"><svg class="animate-spin h-12 w-12 text-green-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg></div><p class="text-xl font-bold text-gray-800">Getting your location...</p></div></div>`;
         
         if (navigator.geolocation) { 
             navigator.geolocation.getCurrentPosition(pos => { 
@@ -250,99 +376,116 @@
     
     function displayResult(data) {
         const { disease, confidence, is_healthy, fertilizer, prescription } = data;
-        const formatted = fertilizer.replace(/\n/g, "<br>").replace(/\*\*/g, "").replace(/^\s*\*\s/gm, "• ");
+        const formatted = fertilizer.replace(/\*\*/g, "").replace(/\*/g, "").replace(/\n/g, "<br>").replace(/^\s*-\s/gm, "• ").replace(/^\s*\*\s/gm, "• ");
+
         const cardBg = is_healthy ? 'bg-gradient-to-br from-green-50 to-emerald-50 border-green-400' : 'bg-gradient-to-br from-red-50 to-orange-50 border-red-400';
-        const icon = is_healthy ? `<svg class="h-10 w-10 text-green-500" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.7-9.3a1 1 0 00-1.4-1.4L9 10.6 7.7 9.3a1 1 0 00-1.4 1.4l2 2a1 1 0 001.4 0l4-4z"/></svg>` : `<svg class="h-10 w-10 text-red-500" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M8.3 3.1c.8-1.36 2.7-1.36 3.5 0l5.6 9.9c.8 1.34-.2 3-1.7 3H4.4c-1.5 0-2.5-1.7-1.7-3l5.6-9.9zM10 13a1 1 0 110-2 1 1 0 010 2zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z"/></svg>`;
+        const icon = is_healthy ? `<svg class="h-12 w-12 text-green-500" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.7-9.3a1 1 0 00-1.4-1.4L9 10.6 7.7 9.3a1 1 0 00-1.4 1.4l2 2a1 1 0 001.4 0l4-4z"/></svg>` : `<svg class="h-12 w-12 text-red-500" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M8.3 3.1c.8-1.36 2.7-1.36 3.5 0l5.6 9.9c.8 1.34-.2 3-1.7 3H4.4c-1.5 0-2.5-1.7-1.7-3l5.6-9.9zM10 13a1 1 0 110-2 1 1 0 010 2zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z"/></svg>`;
         
-        const html = `<div class="animate-fade-in space-y-6"><div class="${cardBg} border-l-4 p-8 rounded-2xl shadow-xl"><div class="flex items-start gap-4"><div class="flex-shrink-0">${icon}</div><div class="flex-1"><span class="text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wide ${is_healthy ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}">AI Diagnosis</span><h3 class="text-3xl font-black text-gray-900 mt-3">${disease}</h3>${!is_healthy ? `<div class="mt-4 flex items-center gap-2"><div class="flex-1 bg-gray-200 rounded-full h-3"><div class="bg-green-600 h-3 rounded-full" style="width:${confidence}%"></div></div><span class="text-sm font-bold">${confidence}%</span></div>` : ''}</div></div></div><div class="bg-gradient-to-br from-blue-50 to-cyan-50 border-l-4 border-blue-400 p-8 rounded-2xl shadow-xl"><h4 class="text-2xl font-bold text-gray-900 mb-4">${prescription}</h4><div class="bg-white/60 p-5 rounded-xl"><p class="text-gray-700 leading-relaxed text-lg">${formatted}</p></div></div><button onclick="location.reload()" class="w-full bg-gradient-to-r from-green-600 to-emerald-600 text-white font-semibold py-4 px-6 rounded-xl shadow-lg">Scan Another Leaf</button></div>`;
+        const html = `<div class="animate-fade-in space-y-6"><div class="${cardBg} border-l-4 p-10 rounded-3xl shadow-2xl border-2 border-white"><div class="flex items-start gap-5"><div class="flex-shrink-0">${icon}</div><div class="flex-1"><span class="text-xs font-black px-4 py-1.5 rounded-full uppercase tracking-wide ${is_healthy ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'} shadow-md">AI Diagnosis</span><h3 class="text-3xl font-black text-gray-900 mt-4">${disease}</h3>${!is_healthy ? `<div class="mt-5 flex items-center gap-3"><div class="flex-1 bg-gray-200 rounded-full h-3.5 shadow-inner"><div class="bg-gradient-to-r from-green-600 to-emerald-600 h-3.5 rounded-full shadow-lg" style="width:${confidence}%"></div></div><span class="text-sm font-black">${confidence}%</span></div>` : ''}</div></div></div><div class="bg-gradient-to-br from-blue-50 to-cyan-50 border-l-4 border-blue-400 p-10 rounded-3xl shadow-2xl border-2 border-white"><h4 class="text-2xl font-black text-gray-900 mb-5">${prescription}</h4><div class="glass p-6 rounded-2xl border-2 border-white shadow-lg"><p class="text-gray-700 leading-relaxed text-lg font-medium">${formatted}</p></div></div><button onclick="location.reload()" class="w-full bg-gradient-to-r from-green-600 to-emerald-600 text-white font-black py-5 px-8 rounded-2xl shadow-2xl shadow-green-600/40 hover:shadow-green-600/60 hover:scale-105 transition-all text-lg">Scan Another Leaf</button></div>`;
         resultContainer.innerHTML = html;
     }
 
-    function displayError(msg) { resultContainer.innerHTML = `<div class="animate-fade-in bg-red-50 border-l-4 border-red-400 p-6 rounded-xl text-red-700 font-medium text-center">${msg}<button onclick="location.reload()" class="block w-full mt-4 bg-red-600 text-white py-3 rounded-lg">Try Again</button></div>`; }
+    function displayError(msg) { resultContainer.innerHTML = `<div class="animate-fade-in glass border-l-4 border-red-400 p-8 rounded-3xl text-red-700 font-bold text-center shadow-2xl border-2 border-white">${msg}<button onclick="location.reload()" class="block w-full mt-6 bg-gradient-to-r from-red-600 to-red-500 text-white py-4 rounded-2xl font-black shadow-xl hover:shadow-2xl hover:scale-105 transition-all">Try Again</button></div>`; }
 
-    // --- NAVBAR, CHAT, TRANSLATE ---
-    const mobileBtn = document.getElementById('mobile-menu-btn'); 
-    const mobileMenu = document.getElementById('mobile-menu'); 
     const translateBtn = document.getElementById('translate-btn'); 
     const translateMenu = document.getElementById('google_translate_element');
-
-    if(mobileBtn) mobileBtn.addEventListener('click', (e) => { e.stopPropagation(); mobileMenu.classList.toggle('hidden'); });
-    translateBtn.addEventListener('click', (e) => { e.stopPropagation(); translateMenu.classList.toggle('hidden'); if(mobileMenu) mobileMenu.classList.add('hidden'); });
+    
+    translateBtn.addEventListener('click', (e) => { e.stopPropagation(); translateMenu.classList.toggle('hidden'); });
     
     document.addEventListener('click', (e) => { 
-        if (mobileBtn && !mobileBtn.contains(e.target) && !mobileMenu.contains(e.target)) mobileMenu.classList.add('hidden'); 
         if (!translateBtn.contains(e.target) && !translateMenu.contains(e.target)) translateMenu.classList.add('hidden'); 
     });
 
     function toggleChat() { document.getElementById('chat-window').classList.toggle('hidden'); }
+    
     async function sendMessage() { 
         const input = document.getElementById('chat-input'); const text = input.value.trim(); 
         if (!text) return; 
         const messages = document.getElementById('chat-messages'); 
-        messages.insertAdjacentHTML('beforeend', `<div class="flex justify-end"><div class="bg-green-600 text-white p-3 rounded-2xl rounded-tr-none shadow-sm text-sm max-w-[85%]">${text}</div></div>`); 
-        input.value = ''; messages.scrollTop = messages.scrollHeight; 
-        
-        const loaderId = 'loader-' + Date.now(); 
-        messages.insertAdjacentHTML('beforeend', `<div id="${loaderId}" class="flex justify-start"><div class="bg-white p-3 rounded-2xl rounded-tl-none shadow-sm text-sm text-gray-500 border border-gray-100 italic animate-pulse">Thinking...</div></div>`); 
+        messages.insertAdjacentHTML('beforeend', `<div class="flex justify-end chat-message"><div class="bg-gradient-to-r from-green-600 to-emerald-600 text-white  text-white p-4 rounded-2xl rounded-tr-none text-sm max-w-[85%] shadow-lg font-medium">${text}</div></div>`); 
+        input.value = ''; 
         messages.scrollTop = messages.scrollHeight; 
         
-        try { 
-            const res = await fetch('/chat', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ message: text }) }); 
-            const data = await res.json(); 
-            document.getElementById(loaderId).remove(); 
-            messages.insertAdjacentHTML('beforeend', `<div class="flex justify-start"><div class="bg-white p-3.5 rounded-2xl rounded-tl-none shadow-sm text-sm text-gray-700 border border-gray-100 leading-relaxed">${data.reply.replace(/\n/g, '<br>').replace(/\*\*/g, '')}</div></div>`); 
-        } catch (e) { 
-            document.getElementById(loaderId).innerHTML = "Error connecting to AI."; 
-        } 
-        messages.scrollTop = messages.scrollHeight; 
+        const loaderId = "loader-" + Date.now();
+        messages.insertAdjacentHTML('beforeend',
+          `<div id="${loaderId}" class="flex justify-start chat-message">
+            <div class="glass p-4 rounded-2xl rounded-tl-none text-gray-500 border-2 border-gray-100 italic flex items-center gap-2">
+              <div class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+              Thinking...
+            </div>
+          </div>`
+        );
+        messages.scrollTop = messages.scrollHeight;
+
+        try {
+          const res = await fetch('/chat', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ message: text })
+          });
+
+          const data = await res.json();
+          document.getElementById(loaderId).remove();
+
+          messages.insertAdjacentHTML('beforeend',
+            `<div class="flex justify-start chat-message">
+              <div class="glass p-4 rounded-2xl rounded-tl-none text-sm text-gray-800 border-2 border-green-100 max-w-[85%] shadow-md">
+                ${data.reply.replace(/\*\*/g, '').replace(/\*/g, '').replace(/\n/g, '<br>')}
+
+              </div>
+            </div>`
+          );
+
+        } catch (err) {
+          document.getElementById(loaderId).innerHTML =
+            `<div class="glass p-4 rounded-2xl text-red-600 border-2 border-red-200">⚠️ Connection error. Please try again.</div>`;
+        }
+
+        messages.scrollTop = messages.scrollHeight;
     }
-    
-    function googleTranslateElementInit() { new google.translate.TranslateElement({ pageLanguage: 'en', includedLanguages: 'en,hi,mr,bn,ta,te,gu,kn,ml,pa,ur,es,fr,de,zh-CN,ar', layout: google.translate.TranslateElement.InlineLayout.VERTICAL, autoDisplay: false }, 'google_translate_element'); }
 
+    (function () {
+      const nav = document.getElementById('main-nav');
+      const logo = document.getElementById('logo-btn');
+      const links = nav.querySelector('.nav-links');
 
-    // COLLIDE NAV EFFECT
-const nav = document.getElementById("main-nav");
-const logoBtn = document.getElementById("logo-btn");
-const navLinks = document.querySelector(".nav-links");
+      if (!nav || !logo || !links) return;
 
-// toggle when clicking logo
-logoBtn.addEventListener("click", (e) => {
-  // allow normal navigation if ctrl/cmd
-  if (e.metaKey || e.ctrlKey) return;
+      logo.addEventListener('click', e => {
+        if (e.ctrlKey || e.metaKey || e.shiftKey) return;
+        e.preventDefault();
 
-  e.preventDefault();
-  nav.classList.toggle("nav-compact");
+        nav.classList.toggle('nav-compact');
 
-  if (nav.classList.contains("nav-compact")) {
-    navLinks.style.opacity = "0";
-  } else {
-    navLinks.style.opacity = "1";
-  }
-});
+        const collapsed = nav.classList.contains('nav-compact');
+        links.style.transition = 'all 0.3s';
+        links.style.pointerEvents = collapsed ? 'none' : 'auto';
+        links.style.opacity = collapsed ? '0' : '1';
+      });
 
-// auto-collapse on mobile
-function adjustNavState() {
-  if (window.innerWidth < 900) {
-    nav.classList.add("nav-compact");
-    navLinks.style.opacity = "0";
-  } else {
-    nav.classList.remove("nav-compact");
-    navLinks.style.opacity = "1";
-  }
-}
-adjustNavState();
-window.addEventListener("resize", adjustNavState);
+      const setCompact = () => {
+        const mobile = window.innerWidth <= 900;
+        nav.classList.toggle('nav-compact', mobile);
+        links.style.pointerEvents = mobile ? 'none' : 'auto';
+        links.style.opacity = mobile ? '0' : '1';
+      };
 
-
-
-
-  </script>
-  <script src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit">
+      setCompact();
+      window.addEventListener('resize', setCompact);
+    })();
   </script>
 
-
-
-
+  <script>
+    function googleTranslateElementInit() {
+      new google.translate.TranslateElement({
+        pageLanguage: 'en',
+        includedLanguages: 'en,hi,mr,bn,ta,te,gu,kn,ml,pa,ur,es,fr,de,zh-CN,ar',
+        layout: google.translate.TranslateElement.InlineLayout.VERTICAL,
+        autoDisplay: false
+      }, 'google_translate_element');
+    }
+  </script>
+  <script src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 
 </body>
 </html>

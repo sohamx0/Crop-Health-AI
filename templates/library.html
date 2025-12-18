@@ -4,286 +4,371 @@
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=0"/>
   <title>Disease Library – CropHealth AI</title>
+  <meta name="theme-color" content="#16a34a">
   <link rel="icon" href="data:,">
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet"/>
-  <style>
-    :root{--green-600:#16a34a;--green-50:#dcfce7;--muted:#6b7280}
-    body{font-family:'Inter',sans-serif;color:#111827;background:linear-gradient(180deg,#f8faf9 0,#fbfdfc 100%);}
 
-        /* GOOGLE TRANSLATE FIXES */
+  <style>
+    body { 
+      font-family: 'Inter', sans-serif; 
+      color: #111827;
+      background: linear-gradient(135deg, #f0fdf4 0%, #ffffff 50%, #ecfdf5 100%);
+    }
+
+    /* scrollbar */
+    ::-webkit-scrollbar { width: 10px; height: 10px; }
+    ::-webkit-scrollbar-track { background: #f1f5f9; border-radius: 10px; }
+    ::-webkit-scrollbar-thumb { 
+      background: linear-gradient(135deg, #16a34a, #059669); 
+      border-radius: 10px; 
+      border: 2px solid #f1f5f9;
+    }
+    ::-webkit-scrollbar-thumb:hover { background: linear-gradient(135deg, #059669, #047857); }
+
+    /* animations */
+    .animate-fade-in-down { animation: fadeInDown 0.8s ease-out; }
+    @keyframes fadeInDown { 
+      from { opacity: 0; transform: translateY(-30px);} 
+      to { opacity: 1; transform: translateY(0);} 
+    }
+
+    .chat-enter { animation: slideUp 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55); }
+    @keyframes slideUp { 
+      from { opacity: 0; transform: translateY(30px) scale(0.9);} 
+      to { opacity: 1; transform: translateY(0) scale(1);} 
+    }
+
+    /* Card hover effect */
+    .disease-card {
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+      overflow: hidden;
+    }
+    .disease-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+      transition: left 0.5s;
+    }
+    .disease-card:hover::before {
+      left: 100%;
+    }
+    .disease-card:hover {
+      transform: translateY(-8px);
+    }
+
+    /* Chip styles */
+    .chip {
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .chip:hover {
+      transform: translateY(-2px);
+    }
+    .chip.active {
+      background: linear-gradient(135deg, #16a34a, #059669);
+      color: white;
+      box-shadow: 0 8px 16px rgba(22, 163, 74, 0.3);
+    }
+
+    /* GOOGLE TRANSLATE */
     .goog-te-banner-frame { display: none !important; }
     body { top: 0 !important; }
     .goog-logo-link, .goog-te-gadget span { display: none !important; }
-    .goog-te-gadget { font-size: 0; color: transparent !important; margin: 0 !important; }
+    .goog-te-gadget { font-size: 0; color: transparent !important; }
 
     .goog-te-combo {
-      display: block !important;
       width: 100% !important;
-      height: 40px !important;
+      height: 42px !important;
       color: #374151 !important; 
-      background-color: #ffffff !important;
-      border: 1px solid #e5e7eb !important;
-      border-radius: 8px !important;
-      padding: 0 12px !important;
+      background: #ffffff !important;
+      border: 2px solid #e5e7eb !important;
+      border-radius: 12px !important;
+      padding: 0 14px !important;
       font-size: 14px !important;
-      font-weight: 500 !important;
+      font-weight: 600 !important;
       font-family: 'Inter', sans-serif !important;
-      outline: none !important;
       cursor: pointer !important;
-      box-sizing: border-box !important;
+      transition: all 0.3s !important;
+    }
+    .goog-te-combo:hover {
+      border-color: #16a34a !important;
+      box-shadow: 0 0 0 3px rgba(22, 163, 74, 0.1) !important;
     }
 
-    /* ensure dropdown always shows */
     .goog-te-menu-frame { z-index: 999999 !important; }
 
-    /* translate button */
     #translate-btn {
-      background-color: #FFFFFF;
-      border: 1px solid rgba(0,0,0,0.12);
-      border-radius: 9999px;
-      padding: 10px 22px;
-      font-size: 16px;
-      font-weight: 600;
-      color: rgba(0,0,0,0.85);
+      background: linear-gradient(135deg, #ffffff, #f9fafb);
+      border: 2px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 10px 24px;
+      font-size: 15px;
+      font-weight: 700;
       cursor: pointer;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      box-shadow: rgba(0,0,0,0.03) 0 1px 3px;
-      transition: all 250ms ease;
+      transition: all .3s;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
     }
 
-    #translate-btn:hover { border-color: rgba(0,0,0,0.2); box-shadow: rgba(0,0,0,0.1) 0 4px 12px; transform: translateY(-1px); }
-
-    #translate-btn:active { background:#F5F5F5; transform: translateY(0); }
-
-    /* responsive fixes */
-    .container { max-width: 90%; }
-
-    @media (max-width: 640px) {
-      section { padding-left:1rem; padding-right:1rem; }
-      h1 { font-size:2.2rem !important; line-height:1.2 !important; }
-      .text-lg, .md\:text-xl { font-size:1rem !important; }
-      nav .flex.items-center.gap-1 a { padding:0.4rem 0.8rem !important; font-size:0.8rem !important; }
-      a.bg-green-600, a.bg-white { padding:0.9rem 1.4rem !important; font-size:0.9rem !important; }
+    #translate-btn:hover { 
+      border-color: #16a34a; 
+      box-shadow: 0 4px 12px rgba(22, 163, 74, 0.15);
+      transform: translateY(-2px);
     }
 
-    @media (max-width: 500px) {
-      nav .bg-white\/90 { padding:0.4rem 1rem !important; }
-      nav span.hidden.sm\:inline { display:none !important; }
+    /* Nav enhancement */
+    #main-nav {
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
-    @media (max-width:1024px) {
-      .hero-img { max-width:100% !important; margin-top:2rem; }
+    .nav-link {
+      position: relative;
+      transition: all 0.3s;
+    }
+    .nav-link::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      width: 0;
+      height: 3px;
+      background: linear-gradient(90deg, #16a34a, #059669);
+      transition: all 0.3s;
+      transform: translateX(-50%);
+      border-radius: 10px;
+    }
+    .nav-link:hover::after {
+      width: 80%;
     }
 
-    @media (max-width:768px) {
-      #features .grid { gap:1.5rem !important; }
-      #features .p-8 { padding:1.5rem !important; }
+    /* Chat improvements */
+    #chat-window {
+      backdrop-filter: blur(10px);
+      background: rgba(255, 255, 255, 0.98);
     }
 
-    @media (max-width:420px) {
-      #chat-window { width:92vw !important; height:70vh !important; right:4vw !important; }
-      #chat-input { font-size:0.85rem; }
+    .chat-message {
+      animation: messageSlide 0.3s ease-out;
+    }
+    @keyframes messageSlide {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
     }
 
-    @media (max-width:600px) {
-      footer .container { gap:0.5rem; flex-direction:column; }
+    /* Green dot ONLY when nav is collapsed */
+    nav.nav-compact .logo-badge::after {
+      content: "";
+      position: absolute;
+      right: -4px;
+      top: -6px;
+      width: 14px;
+      height: 14px;
+      background: linear-gradient(135deg, #10b981, #059669);
+      border-radius: 50%;
+      border: 3px solid white;
+      box-shadow: 0 2px 8px rgba(16,185,129,0.4);
+      animation: dotPulse 2s infinite;
+    }
+    @keyframes dotPulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.1); }
     }
 
-    #google_translate_element { right:0 !important; top:52px !important; }
-    nav > div { overflow:visible !important; }
-
-    @media (max-width:600px) {
-      #translate-btn { padding:10px !important; background:white !important; }
-      #google_translate_element { right:-10px !important; top:48px !important; transform:scale(0.95); }
-    }
-    
-    /* ---------- NAV (global) ---------- */
-    #main-nav { position: fixed; top: 16px; left: 50%; transform: translateX(-50%); z-index: 60; width: 95%; max-width: 900px; }
-    #main-nav .nav-inner {
-      display:flex; align-items:center; justify-content:space-between;
-      gap:12px;
-      background: rgba(255,255,255,0.95);
-      backdrop-filter: blur(6px);
-      border-radius: 9999px;
-      padding: 10px 18px;
-      border: 1px solid rgba(255,255,255,0.6);
-      box-shadow: 0 12px 30px rgba(12,14,20,0.06);
-      transition: padding .25s ease, box-shadow .25s ease, transform .22s ease;
-    }
-
-    /* Logo */
     .logo-badge {
-  display:inline-flex;
-  gap:10px;
-  align-items:center;
-  text-decoration:none;
-  color:#0f172a;
-  font-weight:700;
-  position: relative;   /* <-- ADD THIS */
-}
-
-    .logo-badge svg{width:22px;height:22px;flex-shrink:0}
-
-
-nav.nav-compact .logo-badge::after {
-  content: "";
-  position: absolute;
-  right: -12px;
-  top: -6px;
-  width: 14px;
-  height: 14px;
-  background: #10b981;
-  border-radius: 50%;
-  border: 2px solid white;
-  box-shadow: 0 2px 6px rgba(16,185,129,0.20);
-}
-
-
-    /* nav-links container */
-    .nav-links {
-      display:flex; gap:.5rem; align-items:center; overflow-x:auto; white-space:nowrap;
-      -webkit-overflow-scrolling:touch; padding:6px; transition: opacity .22s ease, max-width .22s ease;
-      cursor:grab;
-    }
-    .nav-links:active{cursor:grabbing}
-    .nav-links a { padding:.45rem .9rem; border-radius:9999px; color:#475569; font-weight:500; text-decoration:none; transition: all .15s ease; font-size:0.95rem; }
-    .nav-links a:hover { background:#f3f4f6; color: #059669; transform:translateY(-1px); }
-    .nav-links a.active, .nav-links a.selected { background:#dff6ea; color:#06683a; font-weight:600; box-shadow:0 4px 10px rgba(16,185,129,0.06); }
-
-    /* controls */
-    .controls { display:flex; gap:8px; align-items:center; }
-    #translate-btn { background:#fff; border:1px solid rgba(0,0,0,0.06); padding:8px 14px; border-radius:999px; font-weight:600; cursor:pointer; box-shadow:0 1px 4px rgba(12,14,20,0.03); }
-    .start-ai { background:#0f172a; color:#fff; padding:8px 14px; border-radius:999px; font-weight:700; text-decoration:none; }
-
-    /* Compact state: hide links, shrink paddings */
-    nav.nav-compact .nav-links { opacity:0; pointer-events:none; max-width:0; overflow:hidden; }
-    nav.nav-compact .nav-inner { padding:8px 12px; transform:translateY(0); }
-    nav.nav-compact .logo-badge { gap:6px; }
-
-    /* ---------- HERO / HEADER ---------- */
-    .hero { padding-top:110px; padding-bottom:48px; max-width:1100px; margin:0 auto; }
-    .lead-badge { display:inline-block; padding:8px 12px; background:#ecfdf5; color:#065f46; border-radius:999px; font-weight:600; margin-bottom:12px; }
-
-    h1.title { font-size:44px; line-height:1.02; margin:6px 0 12px; font-weight:900; color:#0f172a; }
-    h1.title .accent { background:linear-gradient(90deg,#16a34a,#059669); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
-
-    p.subtitle { color:#6b7280; font-size:16px; max-width:760px; margin:0 auto 22px; }
-
-    /* SEARCH & CHIPS */
-    .search-wrap { max-width:760px; margin:0 auto 12px; }
-    .search-box { width:100%; padding:16px 18px; border-radius:14px; border:1px solid #eaedef; box-shadow:inset 0 1px 0 rgba(255,255,255,0.6); display:flex; align-items:center; gap:12px; background:#fff }
-    .search-box input { border:0; outline:0; flex:1; font-size:15px; color:#374151; background:transparent; }
-
-    .chips { display:flex; gap:10px; flex-wrap:wrap; margin-top:12px; align-items:center; justify-content:flex-start; }
-    .chip { background:#fff; padding:8px 12px; border-radius:12px; box-shadow:0 6px 18px rgba(12,14,20,0.03); border:1px solid #f0f2f1; color:#374151; font-weight:600; font-size:14px; cursor:pointer; }
-    .chip.active { background:#d9fce7; color:#065f46; box-shadow:0 8px 22px rgba(16,185,129,0.06); transform:translateY(-2px); }
-
-    /* GRID / CARDS */
-    .results { max-width:1100px; margin:28px auto; padding:0 18px; }
-    .count { color:#374151; font-weight:600; margin-bottom:12px; }
-    .grid { display:grid; grid-template-columns: repeat(3,1fr); gap:20px; }
-    .card { background:#fff; border-radius:18px; overflow:hidden; box-shadow:0 12px 30px rgba(12,14,20,0.06); border:1px solid rgba(0,0,0,0.03); }
-    .card .img { height:180px; background-size:cover; background-position:center; }
-    .card .body { padding:14px; }
-    .card .crop { color:var(--green-600); font-weight:700; font-size:13px; margin-bottom:6px; }
-    .badge { display:inline-block; padding:6px 10px; font-size:12px; border-radius:999px; background:#fee2e2; color:#991b1b; float:right; margin:10px; font-weight:700; }
-
-    /* ---------- MOBILE ADJUSTMENTS ---------- */
-    @media (max-width: 900px){
-      #main-nav { width:96%; max-width:720px; top:12px; }
-      .nav-inner { padding:8px 12px; border-radius:16px; }
-      .nav-links a { padding:.35rem .7rem; font-size:14px; }
-      .start-ai { display:none; }
+      position: relative !important;
     }
 
-    @media (max-width: 640px){
-      #main-nav { width:92%; left:50%; transform:translateX(-50%); top:10px; }
-      .nav-inner { padding:6px 10px; border-radius:14px; }
-      .logo-badge svg{width:18px;height:18px}
-      .logo-badge span{font-size:14px}
-      .controls { gap:6px }
-      #translate-btn { padding:7px 10px; font-size:13px; }
-      .nav-links a { padding:6px 10px; font-size:13px }
-      /* hero */
-      .hero { padding-top:86px; padding-bottom:28px; }
-      h1.title { font-size:32px; text-align:left; }
-      p.subtitle { font-size:15px; padding-right:10px; padding-left:10px; text-align:left; }
-      .search-wrap { padding:0 12px; }
-      .chips { padding:0 12px; gap:8px }
-      .grid { grid-template-columns:1fr; }
-      .card .img { height:220px; }
-      .card { border-radius:14px; }
-      .badge { font-size:11px; padding:5px 8px }
+    /* Icon animations */
+    .icon-float {
+      animation: iconFloat 3s ease-in-out infinite;
+    }
+    @keyframes iconFloat {
+      0%, 100% { transform: translateY(0px) rotate(0deg); }
+      50% { transform: translateY(-5px) rotate(5deg); }
+    }
+
+    /* Glassmorphism effect */
+    .glass {
+      background: rgba(255, 255, 255, 0.7);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.5);
+    }
+
+    /* Gradient text animation */
+    .gradient-text {
+      background: linear-gradient(90deg, #16a34a, #059669, #10b981, #16a34a);
+      background-size: 200% auto;
+      animation: gradient-flow 3s linear infinite;
+    }
+    @keyframes gradient-flow {
+      0% { background-position: 0% center; }
+      100% { background-position: 200% center; }
+    }
+
+    /* Responsive fixes */
+    @media (max-width: 420px) {
+      #chat-window { width: 92vw !important; height: 70vh !important; right: 4vw !important; }
+      #chat-input { font-size: .85rem; }
     }
   </style>
 </head>
+
 <body>
 
   <!-- NAV -->
-  <nav id="main-nav" aria-label="Main navigation">
-    <div class="nav-inner" role="navigation">
-<a id="logo-btn" class="logo-badge" href="/">
-  <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" stroke-width="2"
-       stroke-linecap="round" stroke-linejoin="round">
-    <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
-  </svg>
-</a>
+  <nav id="main-nav" class="fixed top-6 left-1/2 -translate-x-1/2 z-50 w-[95%] max-w-5xl">
+    <div class="glass shadow-2xl rounded-[24px] p-3 pl-7 flex items-center justify-between">
 
+      <a id="logo-btn" href="/" class="logo-badge flex items-center gap-3 font-black text-xl text-gray-800 hover:text-green-600 transition-all mr-4">
+        <svg class="w-7 h-7 text-green-600 icon-float" fill="none" stroke="currentColor" stroke-width="2.5"
+             stroke-linecap="round" stroke-linejoin="round"> 
+          <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+        </svg>
+      </a>
 
-      <div class="nav-links" id="nav-links" aria-hidden="false">
-        <a href="/" class="">Home</a>
-        <a href="/library" class="selected">Library</a>
-        <a href="/scanner" class="">Scanner</a>
+      <div class="nav-links flex gap-2 overflow-x-auto whitespace-nowrap transition-all">
+        <a href="/" class="nav-link px-5 py-2.5 text-gray-700 hover:text-green-600 font-semibold rounded-full hover:bg-white/70">Home</a>
+        <a href="/library" class="px-6 py-2.5 rounded-full font-bold bg-gradient-to-r from-green-500 to-emerald-500 text-white shadow-lg shadow-green-500/30">Library</a>
+        <a href="/scanner" class="nav-link px-5 py-2.5 text-gray-700 hover:text-green-600 font-semibold rounded-full hover:bg-white/70">Scanner</a>
       </div>
 
-      <div class="controls" aria-hidden="false">
-        <button id="translate-btn" aria-haspopup="true" aria-expanded="false">Change Language</button>
-<div id="google_translate_element" class="hidden absolute right-0 top-14 p-3 bg-white rounded-xl shadow-2xl border border-gray-100 z-50 min-w-[200px]"></div>
+      <div class="controls ml-4 relative flex items-center gap-3">
+        <button id="translate-btn">
+         Language
+        </button>
+        <div id="google_translate_element" class="hidden absolute right-0 top-16 p-4 bg-white rounded-2xl shadow-2xl border-2 border-gray-100 min-w-[220px] z-50"></div>
 
-        <a href="/scanner" class="start-ai">Start AI</a>
+        <a href="/scanner" class="bg-gradient-to-r from-gray-900 to-gray-800 text-white px-6 py-3 rounded-full font-bold hover:from-green-600 hover:to-green-500 hidden md:inline-block shadow-lg hover:shadow-xl transition-all hover:scale-105">
+          Start AI →
+        </a>
       </div>
+
     </div>
   </nav>
 
-  <!-- HERO -->
-  <header class="hero">
-    <div style="max-width:760px;margin:0 auto;padding:0 18px;">
-      <div class="lead-badge">📚 Disease Knowledge Base</div>
-      <h1 class="title">Explore the <span class="accent">Plant Library</span></h1>
-      <p class="subtitle">Browse all 38 crop diseases with images, symptoms, and early detection markers.</p>
+  <!-- HERO SECTION -->
+  <section class="relative pt-40 pb-16 lg:pt-48 overflow-hidden">
+    <div class="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full pointer-events-none">
+      <div class="absolute top-[-10%] left-[15%] w-[500px] h-[500px] bg-green-300 rounded-full blur-[140px] opacity-30"></div>
+      <div class="absolute top-[15%] right-[15%] w-96 h-96 bg-emerald-200 rounded-full blur-[140px] opacity-30"></div>
+    </div>
 
-      <div class="search-wrap">
-        <label class="search-box" for="searchInput">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" style="opacity:.6"><path d="M21 21l-4.35-4.35" stroke="#374151" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="11" cy="11" r="6" stroke="#374151" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          <input id="searchInput" type="search" placeholder="Search disease or crop (e.g., 'Tomato', 'Blight')" aria-label="Search disease or crop">
-        </label>
+    <div class="container mx-auto max-w-7xl px-6 relative z-10">
+      <div class="text-center animate-fade-in-down max-w-4xl mx-auto">
+        <div class="inline-flex items-center gap-2 mb-6 px-5 py-2 glass rounded-full font-bold text-sm border-2 border-green-200 shadow-lg">
+          <span class="text-2xl">📚</span>
+          <span class="bg-gradient-to-r from-green-600 to-emerald-600 bg-clip-text text-transparent">Disease Knowledge Base</span>
+        </div>
 
-        <div class="chips" id="chipRow" style="margin-top:12px;">
-          <button class="chip active" data-filter="">All</button>
-          <button class="chip" data-filter="healthy">Healthy</button>
-          <button class="chip" data-filter="tomato">Tomato</button>
-          <button class="chip" data-filter="apple">Apple</button>
-          <button class="chip" data-filter="grape">Grape</button>
-          <button class="chip" data-filter="corn">Corn</button>
+        <h1 class="mb-6 text-5xl font-black leading-tight md:text-6xl text-gray-900">
+          Explore the<br>
+          <span class="text-transparent bg-clip-text gradient-text">Plant Library</span>
+        </h1>
+
+        <p class="mb-10 text-xl text-gray-600 md:text-2xl max-w-3xl mx-auto leading-relaxed">
+          Browse all 38 crop diseases with images, symptoms, and early detection markers.
+        </p>
+
+        <!-- SEARCH BOX -->
+        <div class="max-w-2xl mx-auto mb-8">
+          <div class="glass rounded-2xl shadow-2xl p-4 flex items-center gap-4 border-2 border-white">
+            <svg class="w-6 h-6 text-gray-400" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21 21l-4.35-4.35" stroke-linecap="round" stroke-linejoin="round"/>
+              <circle cx="11" cy="11" r="6" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <input 
+              id="searchInput" 
+              type="search" 
+              placeholder="Search disease or crop (e.g., 'Tomato', 'Blight')" 
+              class="flex-1 bg-transparent border-0 outline-none text-gray-800 text-lg font-medium placeholder-gray-400"
+            >
+          </div>
+        </div>
+
+        <!-- FILTER CHIPS -->
+        <div class="flex gap-3 flex-wrap justify-center mb-8" id="chipRow">
+          <button class="chip active px-6 py-3 rounded-full font-bold text-sm shadow-lg glass" data-filter="">All Diseases</button>
+          <button class="chip px-6 py-3 rounded-full font-bold text-sm shadow-lg glass text-gray-700 hover:text-green-600" data-filter="healthy">Healthy</button>
+          <button class="chip px-6 py-3 rounded-full font-bold text-sm shadow-lg glass text-gray-700 hover:text-green-600" data-filter="tomato">Tomato</button>
+          <button class="chip px-6 py-3 rounded-full font-bold text-sm shadow-lg glass text-gray-700 hover:text-green-600" data-filter="apple">Apple</button>
+          <button class="chip px-6 py-3 rounded-full font-bold text-sm shadow-lg glass text-gray-700 hover:text-green-600" data-filter="grape">Grape</button>
+          <button class="chip px-6 py-3 rounded-full font-bold text-sm shadow-lg glass text-gray-700 hover:text-green-600" data-filter="corn">Corn</button>
+        </div>
+
+        <!-- RESULT COUNT -->
+        <div class="text-gray-600 font-semibold text-lg">
+          <span id="result-count">38</span> results found
         </div>
       </div>
     </div>
-  </header>
+  </section>
 
-  <!-- RESULTS -->
-  <section class="results">
-    <div class="count"><span id="result-count">38</span> results</div>
+  <!-- DISEASE GRID -->
+  <section class="px-6 py-12 bg-gradient-to-b from-white/50 to-gray-50/50">
+    <div class="container mx-auto max-w-7xl">
+      <div class="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3" id="disease-grid"></div>
 
-    <div class="grid" id="disease-grid" aria-live="polite"></div>
-
-    <div id="no-results" class="text-center py-8 hidden">
-      <p style="color:#9aa0a6">No results found — try another keyword</p>
+      <div id="no-results" class="text-center py-16 hidden">
+        <div class="text-6xl mb-4">🔍</div>
+        <p class="text-xl text-gray-500 font-semibold">No results found — try another keyword</p>
+      </div>
     </div>
   </section>
-  <!-- GOOGLE TRANSLATE -->
+
+  <div class="fixed bottom-6 right-6 z-50 flex flex-col items-end">
+    <div id="chat-window" class="hidden w-96 h-[520px] rounded-3xl shadow-2xl border-2 border-gray-200 flex flex-col mb-4 overflow-hidden chat-enter">
+
+      <div class="bg-gradient-to-r from-green-600 to-emerald-600 p-5 text-white font-bold flex justify-between items-center shadow-lg">
+        <div class="flex items-center gap-3">
+          <div class="w-3 h-3 bg-green-300 rounded-full animate-pulse"></div>
+          <span class="text-lg">🌱 CropHealth Assistant</span>
+        </div>
+        <button onclick="toggleChat()" class="text-white text-2xl hover:bg-white/20 w-8 h-8 rounded-full transition-all">✕</button>
+      </div>
+
+      <div id="chat-messages" class="flex-1 min-h-0 p-5 overflow-y-auto space-y-4" style="background: linear-gradient(to bottom, #f9fafb, #ffffff);">
+        <div class="flex justify-start chat-message">
+          <div class="glass p-4 rounded-2xl rounded-tl-none shadow-md text-sm text-gray-800 border-2 border-green-100 max-w-[85%]">
+            <strong>Hello! 👋</strong><br>I'm your AI farming assistant. How can I help you grow better today? 🌱
+          </div>
+        </div>
+      </div>
+
+      <div class="p-4 bg-white border-t-2 flex gap-3 items-center">
+        <input id="chat-input" type="text" class="flex-1 border-2 rounded-2xl px-5 py-3 text-sm font-medium focus:outline-none focus:border-green-500 focus:ring-4 focus:ring-green-500/20 transition-all" placeholder="Ask anything about farming..." onkeypress="if(event.key==='Enter') sendMessage()">
+        <button onclick="sendMessage()" class="bg-gradient-to-r from-green-600 to-emerald-600 text-white p-3 rounded-2xl shadow-lg hover:shadow-xl hover:scale-105 transition-all">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2.5">
+            <path d="M12 19l9 2-9-18-9 18 9-2z"/>
+          </svg>
+        </button>
+      </div>
+
+    </div>
+
+    <button onclick="toggleChat()" class="bg-gradient-to-r from-green-600 to-emerald-600 text-white p-5 rounded-full shadow-2xl hover:shadow-green-500/50 border-4 border-white transition-all hover:scale-110">
+      <img src="/assets/library_images/Chat-EDi.png" class="w-8 h-8 object-contain">
+    </button>
+
+  </div>
+
+  <footer class="px-6 py-12 glass border-t-2 border-gray-200">
+    <div class="container mx-auto flex flex-col md:flex-row justify-center items-center gap-5">
+      <div class="flex items-center gap-3 font-black text-xl text-gray-900">
+        <div class="w-10 h-10 bg-gradient-to-br from-green-500 to-emerald-600 rounded-2xl flex items-center justify-center text-white shadow-lg">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2.5">
+            <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+          </svg>
+        </div>
+        CropHealth AI
+      </div>
+      <p class="text-base text-gray-600 font-medium">© 2025 CropHealth AI. Empowering farmers worldwide.</p>
+    </div>
+  </footer>
+
   <script>
     function googleTranslateElementInit() {
       new google.translate.TranslateElement({
@@ -296,9 +381,7 @@ nav.nav-compact .logo-badge::after {
   </script>
   <script src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 
-
   <script>
-        /* TRANSLATE TOGGLE */
     const translateBtn = document.getElementById('translate-btn');
     const translateMenu = document.getElementById('google_translate_element');
 
@@ -306,17 +389,13 @@ nav.nav-compact .logo-badge::after {
       e.stopPropagation();
       translateMenu.classList.toggle('hidden');
     });
+
     document.addEventListener('click', e => {
-      if (!translateBtn.contains(e.target) && !translateMenu.contains(e.target))
+      if (!translateBtn.contains(e.target) && !translateMenu.contains(e.target)) {
         translateMenu.classList.add('hidden');
+      }
     });
 
-
-
-
-
-
-    // ---------- DATA ----------
     const diseases = [
       "Apple___Apple_scab","Apple___Black_rot","Apple___Cedar_apple_rust","Apple___healthy",
       "Blueberry___healthy","Cherry_(including_sour)___Powdery_mildew","Cherry_(including_sour)___healthy",
@@ -330,56 +409,65 @@ nav.nav-compact .logo-badge::after {
       "Tomato___Tomato_Yellow_Leaf_Curl_Virus","Tomato___Tomato_mosaic_virus","Tomato___healthy"
     ];
 
-    // ---------- HELPERS ----------
     const grid = document.getElementById("disease-grid");
     const search = document.getElementById("searchInput");
     const resultCount = document.getElementById("result-count");
     const noResults = document.getElementById("no-results");
     const chips = Array.from(document.querySelectorAll('.chip'));
 
-    function formatName(x){
+    function formatName(x) {
       return x.replace(/___/g," - ").replace(/_/g," ");
     }
+
     function createFileName(name) {
       return name.toLowerCase().replace(/___/g,' ').replace(/_/g,' ').replace(/\s+/g,'-').replace(/\(|\)/g,'').replace(/,+/g,'');
     }
+
     const isHealthy = x => x.toLowerCase().includes("healthy");
     const crop = x => x.split("___")[0].replace(/_/g," ");
 
-    function render(filter=""){
+    function render(filter="") {
       grid.innerHTML = "";
       const filtered = diseases.filter(item => item.toLowerCase().includes(filter.toLowerCase()));
       resultCount.textContent = filtered.length;
 
-      if(filtered.length === 0){
-        noResults.classList.remove('hidden'); grid.classList.add('hidden'); return;
+      if(filtered.length === 0) {
+        noResults.classList.remove('hidden');
+        grid.classList.add('hidden');
+        return;
       }
-      noResults.classList.add('hidden'); grid.classList.remove('hidden');
+      noResults.classList.add('hidden');
+      grid.classList.remove('hidden');
 
-      filtered.forEach(d=>{
+      filtered.forEach(d => {
         const display = formatName(d);
         const file = createFileName(d);
         const src = `/assets/library_images/${file}.jpg`;
         const healthy = isHealthy(d);
+        
         grid.insertAdjacentHTML('beforeend', `
-          <article class="card" role="article">
-            <div class="img" style="background-image:url('${src}');" onerror="this.style.backgroundImage='url(https://placehold.co/800x600/dcfce7/166534?text=No+Image)';"></div>
-            <div class="body">
-              <div style="display:flex;align-items:center;justify-content:space-between;">
-                <div class="crop">${crop(d)}</div>
-                <div><span class="badge">${healthy ? 'HEALTHY' : 'DISEASE'}</span></div>
+          <article class="disease-card glass rounded-3xl overflow-hidden shadow-xl border-2 border-white hover:shadow-2xl">
+            <div class="relative h-64 overflow-hidden">
+              <img src="${src}" alt="${display}" class="w-full h-full object-cover" onerror="this.src='https://placehold.co/800x600/dcfce7/166534?text=No+Image'">
+              <div class="absolute top-4 right-4">
+                <span class="px-4 py-2 rounded-full text-xs font-black shadow-lg ${healthy ? 'bg-green-500 text-white' : 'bg-red-500 text-white'}">
+                  ${healthy ? '✓ HEALTHY' : '⚠ DISEASE'}
+                </span>
               </div>
-              <h3 style="font-size:16px;margin-top:6px;color:#0f172a;font-weight:800;">${display}</h3>
+            </div>
+            <div class="p-6">
+              <div class="text-green-600 font-black text-sm uppercase tracking-wide mb-2">${crop(d)}</div>
+              <h3 class="text-xl font-black text-gray-900 leading-tight">${display}</h3>
             </div>
           </article>
         `);
       });
     }
 
-    // ---------- CHIPS & SEARCH ----------
-    chips.forEach(c=>{
-      c.addEventListener('click',()=>{
-        chips.forEach(x=>x.classList.remove('active'));
+    /* CHIPS & SEARCH */
+    chips.forEach(c => {
+      c.addEventListener('click', () => {
+        chips.forEach(x => x.classList.remove('active'));
         c.classList.add('active');
         const filter = c.dataset.filter || '';
         search.value = filter;
@@ -387,15 +475,70 @@ nav.nav-compact .logo-badge::after {
       });
     });
 
-    search.addEventListener('input', (e)=> {
-      // if user typing, deselect chips
-      chips.forEach(x=>x.classList.remove('active'));
+    search.addEventListener('input', (e) => {
+      chips.forEach(x => x.classList.remove('active'));
       render(e.target.value);
     });
 
     render();
 
-    /* NAV compact + scroll */
+    function toggleChat() {
+      document.getElementById('chat-window').classList.toggle('hidden');
+    }
+
+    async function sendMessage() {
+      const input = document.getElementById('chat-input');
+      const text = input.value.trim();
+      if (!text) return;
+
+      const messages = document.getElementById('chat-messages');
+
+      messages.insertAdjacentHTML('beforeend',
+        `<div class="flex justify-end chat-message">
+          <div class="bg-gradient-to-r from-green-600 to-emerald-600 text-white p-4 rounded-2xl rounded-tr-none text-sm max-w-[85%] shadow-lg font-medium">${text}</div>
+        </div>`
+      );
+
+      input.value = '';
+      messages.scrollTop = messages.scrollHeight;
+
+      const loaderId = "loader-" + Date.now();
+      messages.insertAdjacentHTML('beforeend',
+        `<div id="${loaderId}" class="flex justify-start chat-message">
+          <div class="glass p-4 rounded-2xl rounded-tl-none text-gray-500 border-2 border-gray-100 italic flex items-center gap-2">
+            <div class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+            Thinking...
+          </div>
+        </div>`
+      );
+
+      try {
+        const res = await fetch('/chat', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ message: text })
+        });
+
+        const data = await res.json();
+        document.getElementById(loaderId).remove();
+
+        messages.insertAdjacentHTML('beforeend',
+          `<div class="flex justify-start chat-message">
+            <div class="glass p-4 rounded-2xl rounded-tl-none text-sm text-gray-800 border-2 border-green-100 max-w-[85%] shadow-md">
+              ${data.reply.replace(/\*\*/g, '').replace(/\*/g, '').replace(/\n/g, '<br>')}
+
+            </div>
+          </div>`
+        );
+
+      } catch (err) {
+        document.getElementById(loaderId).innerHTML = `<div class="glass p-4 rounded-2xl text-red-600 border-2 border-red-200">⚠️ Connection error. Please try again.</div>`;
+      }
+
+      messages.scrollTop = messages.scrollHeight;
+    }
+
+    /* NAV COLLAPSE + DOT LOGIC */
     (function(){
       const nav = document.getElementById('main-nav');
       const logo = document.getElementById('logo-btn');
@@ -403,58 +546,16 @@ nav.nav-compact .logo-badge::after {
 
       if (!nav || !logo || !links) return;
 
-      // long press for navigation
-      let pressTimer;
-      logo.addEventListener("mousedown", () => {
-        pressTimer = setTimeout(() => { window.location = "/"; }, 500);
-      });
-      logo.addEventListener("mouseup", () => clearTimeout(pressTimer));
-
-      // toggle compact
-      logo.addEventListener("click", e => {
+      logo.addEventListener('click', e => {
         if (e.ctrlKey || e.metaKey || e.shiftKey) return;
         e.preventDefault();
 
         nav.classList.toggle('nav-compact');
-        const collapsed = nav.classList.contains('nav-compact');
 
+        const collapsed = nav.classList.contains('nav-compact');
+        links.style.transition = 'all 0.3s';
         links.style.pointerEvents = collapsed ? 'none' : 'auto';
         links.style.opacity = collapsed ? '0' : '1';
-      });
-
-      // drag scroll
-      let isDown = false, startX, scrollLeft;
-      links.addEventListener('mousedown', e => {
-        isDown = true;
-        startX = e.pageX - links.offsetLeft;
-        scrollLeft = links.scrollLeft;
-      });
-      links.addEventListener('mouseleave', () => isDown = false);
-      links.addEventListener('mouseup', () => isDown = false);
-      links.addEventListener('mousemove', e => {
-        if (!isDown) return;
-        e.preventDefault();
-        const x = e.pageX - links.offsetLeft;
-        const walk = (x - startX) * 1.2;
-        links.scrollLeft = scrollLeft - walk;
-      });
-
-      links.addEventListener('touchstart', () => {
-        if (nav.classList.contains('nav-compact')) {
-          nav.classList.remove('nav-compact');
-          links.style.pointerEvents = 'auto';
-          links.style.opacity = '1';
-        }
-      });
-
-      // collapse only on mobile
-      document.addEventListener('click', ev => {
-        if (window.innerWidth > 900) return;
-        if (!nav.contains(ev.target)) {
-          nav.classList.add('nav-compact');
-          links.style.pointerEvents = 'none';
-          links.style.opacity = '0';
-        }
       });
 
       const setCompact = () => {
@@ -466,117 +567,8 @@ nav.nav-compact .logo-badge::after {
 
       setCompact();
       window.addEventListener('resize', setCompact);
-
     })();
   </script>
 
-
-
-
-<!-- CHATBOT -->
-<div class="fixed bottom-6 right-6 z-50 flex flex-col items-end">
-  <div id="chat-window" class="hidden bg-white w-96 h-[500px] rounded-2xl shadow-2xl border border-gray-200 flex flex-col mb-4 overflow-hidden chat-enter">
-
-    <div class="bg-green-600 p-4 text-white font-bold flex justify-between items-center">
-      <div class="flex items-center gap-2">
-        <span>🌱 CropHealth Bot</span>
-        <span class="text-xs bg-green-500 px-2 py-0.5 rounded-full">Online</span>
-      </div>
-      <button onclick="toggleChat()" class="text-white hover:text-gray-200 text-xl">✕</button>
-    </div>
-
-    <div id="chat-messages" class="flex-1 min-h-0 p-4 overflow-y-auto space-y-4 bg-gray-50">
-      <div class="flex justify-start">
-        <div class="bg-white p-3 rounded-2xl rounded-tl-none shadow-sm text-sm text-gray-700 border">
-          Hello! I'm your farming assistant. Ask me anything about crops 🌾
-        </div>
-      </div>
-    </div>
-
-    <div class="p-4 bg-white border-t flex gap-2 items-center">
-      <input id="chat-input" type="text" class="flex-1 border rounded-full px-4 py-2.5 text-sm focus:outline-none focus:border-green-500 focus:ring-1 focus:ring-green-500" placeholder="Ask a question..." onkeypress="if(event.key==='Enter') sendMessage()">
-      <button onclick="sendMessage()" class="bg-green-600 text-white p-2.5 rounded-full shadow-md hover:bg-green-700 active:scale-95">
-        <svg class="w-5 h-5" fill="none" stroke="currentColor"><path d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/></svg>
-      </button>
-    </div>
-
-  </div>
-
-  <button onclick="toggleChat()" class="bg-green-600 text-white p-4 rounded-full shadow-2xl hover:bg-green-700 active:scale-95 border-4 border-white">
-    <img src="/assets/library_images/Chat-EDi.png" class="w-7 h-7 object-contain" alt="chatbot icon">
-  </button>
-
-</div>
-
-
-
-
-<script>
-
-
-  /* CHATBOT */
-function toggleChat() {
-  document.getElementById('chat-window').classList.toggle('hidden');
-}
-
-async function sendMessage() {
-  const input = document.getElementById('chat-input');
-  const text = input.value.trim();
-  if (!text) return;
-
-  const messages = document.getElementById('chat-messages');
-
-  // user bubble
-  messages.insertAdjacentHTML('beforeend',
-    `<div class="flex justify-end">
-      <div class="bg-green-600 text-white p-3 rounded-2xl rounded-tr-none text-sm max-w-[85%]">${text}</div>
-    </div>`
-  );
-
-  input.value = '';
-  messages.scrollTop = messages.scrollHeight;
-
-  // loader
-  const loaderId = "loader-" + Date.now();
-  messages.insertAdjacentHTML('beforeend',
-    `<div id="${loaderId}" class="flex justify-start">
-      <div class="bg-white p-3 rounded-2xl rounded-tl-none text-gray-500 border italic">Thinking...</div>
-    </div>`
-  );
-
-  messages.scrollTop = messages.scrollHeight;
-
-  try {
-    const res = await fetch('/chat', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ message: text })
-    });
-
-    if (!res.ok) throw new Error("Bad response");
-
-    const data = await res.json();
-
-    document.getElementById(loaderId).remove();
-
-    messages.insertAdjacentHTML('beforeend',
-      `<div class="flex justify-start">
-        <div class="bg-white p-3 rounded-2xl rounded-tl-none text-sm text-gray-700 border">
-          ${data.reply.replace(/\n/g, '<br>')}
-        </div>
-      </div>`
-    );
-
-  } catch (err) {
-    document.getElementById(loaderId).innerHTML = "Error connecting to AI.";
-  }
-
-  messages.scrollTop = messages.scrollHeight;
-}
-
-
-
-
-</script>
 </body>
 </html>
