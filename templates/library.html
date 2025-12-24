@@ -16,7 +16,6 @@
       background: linear-gradient(135deg, #f0fdf4 0%, #ffffff 50%, #ecfdf5 100%);
     }
 
-    /* scrollbar */
     ::-webkit-scrollbar { width: 10px; height: 10px; }
     ::-webkit-scrollbar-track { background: #f1f5f9; border-radius: 10px; }
     ::-webkit-scrollbar-thumb { 
@@ -26,7 +25,6 @@
     }
     ::-webkit-scrollbar-thumb:hover { background: linear-gradient(135deg, #059669, #047857); }
 
-    /* animations */
     .animate-fade-in-down { animation: fadeInDown 0.8s ease-out; }
     @keyframes fadeInDown { 
       from { opacity: 0; transform: translateY(-30px);} 
@@ -39,7 +37,6 @@
       to { opacity: 1; transform: translateY(0) scale(1);} 
     }
 
-    /* Card hover effect */
     .disease-card {
       transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
       position: relative;
@@ -62,7 +59,6 @@
       transform: translateY(-8px);
     }
 
-    /* Chip styles */
     .chip {
       transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     }
@@ -75,7 +71,6 @@
       box-shadow: 0 8px 16px rgba(22, 163, 74, 0.3);
     }
 
-    /* GOOGLE TRANSLATE */
     .goog-te-banner-frame { display: none !important; }
     body { top: 0 !important; }
     .goog-logo-link, .goog-te-gadget span { display: none !important; }
@@ -120,7 +115,6 @@
       transform: translateY(-2px);
     }
 
-    /* Nav enhancement */
     #main-nav {
       transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     }
@@ -145,7 +139,6 @@
       width: 80%;
     }
 
-    /* Chat improvements */
     #chat-window {
       backdrop-filter: blur(10px);
       background: rgba(255, 255, 255, 0.98);
@@ -159,7 +152,6 @@
       to { opacity: 1; transform: translateY(0); }
     }
 
-    /* Green dot ONLY when nav is collapsed */
     nav.nav-compact .logo-badge::after {
       content: "";
       position: absolute;
@@ -182,7 +174,6 @@
       position: relative !important;
     }
 
-    /* Icon animations */
     .icon-float {
       animation: iconFloat 3s ease-in-out infinite;
     }
@@ -191,14 +182,12 @@
       50% { transform: translateY(-5px) rotate(5deg); }
     }
 
-    /* Glassmorphism effect */
     .glass {
       background: rgba(255, 255, 255, 0.7);
       backdrop-filter: blur(20px);
       border: 1px solid rgba(255, 255, 255, 0.5);
     }
 
-    /* Gradient text animation */
     .gradient-text {
       background: linear-gradient(90deg, #16a34a, #059669, #10b981, #16a34a);
       background-size: 200% auto;
@@ -209,7 +198,6 @@
       100% { background-position: 200% center; }
     }
 
-    /* Responsive fixes */
     @media (max-width: 420px) {
       #chat-window { width: 92vw !important; height: 70vh !important; right: 4vw !important; }
       #chat-input { font-size: .85rem; }
@@ -219,7 +207,6 @@
 
 <body>
 
-  <!-- NAV -->
   <nav id="main-nav" class="fixed top-6 left-1/2 -translate-x-1/2 z-50 w-[95%] max-w-5xl">
     <div class="glass shadow-2xl rounded-[24px] p-3 pl-7 flex items-center justify-between">
 
@@ -250,7 +237,6 @@
     </div>
   </nav>
 
-  <!-- HERO SECTION -->
   <section class="relative pt-40 pb-16 lg:pt-48 overflow-hidden">
     <div class="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full pointer-events-none">
       <div class="absolute top-[-10%] left-[15%] w-[500px] h-[500px] bg-green-300 rounded-full blur-[140px] opacity-30"></div>
@@ -273,7 +259,6 @@
           Browse all 38 crop diseases with images, symptoms, and early detection markers.
         </p>
 
-        <!-- SEARCH BOX -->
         <div class="max-w-2xl mx-auto mb-8">
           <div class="glass rounded-2xl shadow-2xl p-4 flex items-center gap-4 border-2 border-white">
             <svg class="w-6 h-6 text-gray-400" fill="none" stroke="currentColor" stroke-width="2">
@@ -289,7 +274,6 @@
           </div>
         </div>
 
-        <!-- FILTER CHIPS -->
         <div class="flex gap-3 flex-wrap justify-center mb-8" id="chipRow">
           <button class="chip active px-6 py-3 rounded-full font-bold text-sm shadow-lg glass" data-filter="">All Diseases</button>
           <button class="chip px-6 py-3 rounded-full font-bold text-sm shadow-lg glass text-gray-700 hover:text-green-600" data-filter="healthy">Healthy</button>
@@ -299,7 +283,6 @@
           <button class="chip px-6 py-3 rounded-full font-bold text-sm shadow-lg glass text-gray-700 hover:text-green-600" data-filter="corn">Corn</button>
         </div>
 
-        <!-- RESULT COUNT -->
         <div class="text-gray-600 font-semibold text-lg">
           <span id="result-count">38</span> results found
         </div>
@@ -307,7 +290,6 @@
     </div>
   </section>
 
-  <!-- DISEASE GRID -->
   <section class="px-6 py-12 bg-gradient-to-b from-white/50 to-gray-50/50">
     <div class="container mx-auto max-w-7xl">
       <div class="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3" id="disease-grid"></div>
@@ -537,7 +519,6 @@
       messages.scrollTop = messages.scrollHeight;
     }
 
-    /* NAV COLLAPSE + DOT LOGIC */
     (function(){
       const nav = document.getElementById('main-nav');
       const logo = document.getElementById('logo-btn');
