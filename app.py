@@ -10,7 +10,7 @@ import os
 app = Flask(__name__, static_folder='assets', static_url_path='/assets')
 
 
-GEMINI_API_KEY = "AIzaSyCYjX5eOQrv3cPAaG1Fxs-kFj1MzK75Wco" 
+GEMINI_API_KEY = "paste here" 
 GEMINI_URL = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key={GEMINI_API_KEY}"
 
 try:
