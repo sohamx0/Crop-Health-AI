@@ -47,7 +47,7 @@ No database or persistent storage is used.
 | Model          | Accuracy |
 |----------------|----------|
 | EfficientNetB0 | 97.16%   |
-| **ResNet50**   | 96.86%   |
+| **ResNet50**   | 97.86%   |
 | Custom CNN     | 95.84%   |
 | MobileNetV2    | 93.80%   |
 
