@@ -1,0 +1,28 @@
+{
+  "name": "edi",
+  "version": "1.0.0",
+  "private": true,
+  "description": "An AI-driven web application for real-time crop disease detection and fertilizer recommendations using deep learning and large language models.",
+  "main": "tailwind.config.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sohamx0/Crop-Health-Ai.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/sohamx0/Crop-Health-Ai/issues"
+  },
+  "homepage": "https://github.com/sohamx0/Crop-Health-Ai#readme",
+  "devDependencies": {
+    "@tailwindcss/forms": "^0.5.11",
+    "autoprefixer": "^10.4.23",
+    "postcss": "^8.5.6",
+    "tailwindcss": "^4.1.18"
+  }
+}
