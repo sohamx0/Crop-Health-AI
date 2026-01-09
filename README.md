@@ -35,6 +35,22 @@ It is designed to be lightweight, fast, and usable directly by farmers via a mob
 
 No database or persistent storage is used.
 
+### Project Structure
+
+```
+Crop-Health-AI/
+├── app.py                      # Flask application & API endpoints
+├── plant_disease_model.h5      # Pre-trained ResNet50 model
+├── requirements.txt            # Python dependencies
+├── templates/                  # HTML templates
+│   ├── index.html             # Main UI
+│   ├── library.html           # Disease library
+│   └── vision_checker.html    # Vision checker page
+├── static/                     # Static assets (CSS, JS)
+├── assets/                     # Image assets
+└── .env                        # Environment variables (create this)
+```
+
 ## 🔬 Model Details
 
 - Dataset: PlantVillage
@@ -73,20 +89,55 @@ ResNet50 was selected for deployment due to accuracy–speed balance.
 7. Image discarded from memory  
 
 
-## ⚙️ Installation & Run
+## ⚙️ Installation & Setup
 
-> Make sure Python 3.9+ is installed.
+### Prerequisites
+
+- Python 3.9 or higher
+- Gemini API key (for fertilizer recommendations)
+
+### Step 1: Clone the Repository
 
 ```bash
 git clone https://github.com/sohamx0/Crop-Health-AI.git
 cd Crop-Health-AI
+```
+
+### Step 2: Install Dependencies
+
+```bash
 pip install -r requirements.txt
+```
+
+### Step 3: Configure Gemini API Key
+
+1. Get your Gemini API key from [Google AI Studio](https://makersuite.google.com/app/apikey)
+2. Create a `.env` file in the root directory:
+   ```bash
+   GEMINI_API_KEY=your_actual_api_key_here
+   ```
+3. The `.env` file is already in `.gitignore`, so your API key won't be committed to GitHub.
+
+> **Note**: Disease detection will work without the API key, but fertilizer recommendations require it.
+
+### Step 4: Run the Application
+
+```bash
 python app.py
 ```
-Open in browser :
+
+The application will start on `http://127.0.0.1:5000/`
+
+Open in your browser:
 ```
 http://127.0.0.1:5000/
 ```
+## 📡 API Endpoints
+
+- `POST /predict_disease` - Upload image and get disease prediction + fertilizer recommendation
+- `GET /` - Main application interface
+- `GET /library` - Disease library with sample images
+
 ## 🛣 Future Scope
 
 - Weather & soil sensor integration
@@ -95,5 +146,14 @@ http://127.0.0.1:5000/
 - IoT-based monitoring
 - Region-specific retraining
 
+## 🤝 Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
+
 ## 📜 License
+
 MIT License
+
+## 👤 Author
+
+[sohamx0](https://github.com/sohamx0)
