@@ -3,11 +3,18 @@ import requests
 import json
 from PIL import Image
 import numpy as np
-from tensorflow.keras.models import load_model
-from tensorflow.keras.applications.resnet50 import preprocess_input
 import os
 import base64
 import io
+from typing import Any, Optional
+
+try:
+    from tensorflow.keras.models import load_model
+    from tensorflow.keras.applications.resnet50 import preprocess_input
+except Exception as e:
+    load_model = None
+    preprocess_input = None
+    print(f"⚠️  Warning: TensorFlow/Keras not available: {e}")
 
 # Load environment variables from .env file
 try:
@@ -17,6 +24,14 @@ except ImportError:
     pass  # python-dotenv not installed, skip
 
 app = Flask(__name__, static_folder='assets', static_url_path='/assets')
+
+# Basic hardening / config
+app.config["MAX_CONTENT_LENGTH"] = int(os.getenv("MAX_CONTENT_LENGTH", str(8 * 1024 * 1024)))  # 8MB
+ALLOWED_IMAGE_EXTENSIONS = {".jpg", ".jpeg", ".png", ".webp"}
+
+DISEASE_MODEL_PATH = os.getenv("DISEASE_MODEL_PATH", "plant_disease_model.h5")
+CLASS_NAMES_PATH = os.getenv("CLASS_NAMES_PATH", "class_names.json")
+SKIP_MODEL_LOAD = os.getenv("SKIP_MODEL_LOAD", "0") == "1"
 
 
 # Load API key from environment variable
@@ -28,16 +43,55 @@ else:
     print(f"✅ Gemini API key loaded (length: {len(GEMINI_API_KEY)})")
 GEMINI_URL = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key={GEMINI_API_KEY}" if GEMINI_API_KEY else ""
 
-try:
-    disease_model = load_model('plant_disease_model.h5')
-    DISEASE_CLASS_NAMES = sorted(['Apple___Apple_scab', 'Apple___Black_rot', 'Apple___Cedar_apple_rust', 'Apple___healthy', 'Blueberry___healthy', 'Cherry_(including_sour)___Powdery_mildew', 'Cherry_(including_sour)___healthy', 'Corn_(maize)___Cercospora_leaf_spot_Gray_leaf_spot', 'Corn_(maize)___Common_rust', 'Corn_(maize)___Northern_Leaf_Blight', 'Corn_(maize)___healthy', 'Grape___Black_rot', 'Grape___Esca_(Black_Measles)', 'Grape___Leaf_blight_(Isariopsis_Leaf_Spot)', 'Grape___healthy', 'Orange___Haunglongbing_(Citrus_greening)', 'Peach___Bacterial_spot', 'Peach___healthy', 'Pepper,_bell___Bacterial_spot', 'Pepper,_bell___healthy', 'Potato___Early_blight', 'Potato___Late_blight', 'Potato___healthy', 'Raspberry___healthy', 'Soybean___healthy', 'Squash___Powdery_mildew', 'Strawberry___Leaf_scorch', 'Strawberry___healthy', 'Tomato___Bacterial_spot', 'Tomato___Early_blight', 'Tomato___Late_blight', 'Tomato___Leaf_Mold', 'Tomato___Septoria_leaf_spot', 'Tomato___Spider_mites_Two-spotted_spider_mite', 'Tomato___Target_Spot', 'Tomato___Tomato_Yellow_Leaf_Curl_Virus', 'Tomato___Tomato_mosaic_virus', 'Tomato___healthy'])
-    print("✅ Local disease detection model (ResNet50) loaded successfully!")
-except Exception as e:
-    print(f"❌ Error loading local disease model: {e}")
+
+def _load_class_names(path: str) -> Optional[list[str]]:
+    try:
+        with open(path, "r", encoding="utf-8") as f:
+            data = json.load(f)
+        if not isinstance(data, list) or not all(isinstance(x, str) for x in data):
+            raise ValueError("class names JSON must be a list of strings")
+        return data
+    except FileNotFoundError:
+        print(f"⚠️  Warning: Class names file not found: {path}")
+        return None
+    except Exception as e:
+        print(f"⚠️  Warning: Failed to load class names from {path}: {e}")
+        return None
+
+DISEASE_CLASS_NAMES = _load_class_names(CLASS_NAMES_PATH)
+
+if SKIP_MODEL_LOAD:
+    print("ℹ️  SKIP_MODEL_LOAD=1 set; skipping model load")
     disease_model = None
+else:
+    try:
+        if load_model is None:
+            raise RuntimeError("TensorFlow/Keras is not installed or failed to import")
+
+        disease_model = load_model(DISEASE_MODEL_PATH)
+        print("✅ Local disease detection model loaded successfully!")
+
+        if DISEASE_CLASS_NAMES is not None:
+            try:
+                num_outputs = int(getattr(disease_model, "output_shape", [None, None])[-1])
+                if len(DISEASE_CLASS_NAMES) != num_outputs:
+                    print(
+                        "⚠️  Warning: Class name count does not match model outputs "
+                        f"({len(DISEASE_CLASS_NAMES)} vs {num_outputs})."
+                    )
+            except Exception:
+                pass
+        else:
+            print(
+                "⚠️  Warning: DISEASE_CLASS_NAMES not loaded. "
+                "Predictions will be blocked to avoid wrong label mapping."
+            )
+    except Exception as e:
+        print(f"❌ Error loading local disease model: {e}")
+        disease_model = None
 
 
-def ask_gemini(prompt_text):
+def ask_gemini(prompt_text: str) -> str:
     if not GEMINI_API_KEY or not GEMINI_URL:
         return "Error: Gemini API key not configured. Please set GEMINI_API_KEY in .env file"
     
@@ -45,7 +99,15 @@ def ask_gemini(prompt_text):
     try:
         response = requests.post(GEMINI_URL, headers={'Content-Type': 'application/json'}, data=json.dumps(payload), timeout=30)
         if response.status_code == 200:
-            return response.json()['candidates'][0]['content']['parts'][0]['text']
+            data = response.json()
+            candidates = data.get("candidates") or []
+            if not candidates:
+                return "Error: AI server returned no candidates."
+            content = (candidates[0].get("content") or {}).get("parts") or []
+            if not content:
+                return "Error: AI server returned empty content."
+            text = content[0].get("text")
+            return text if isinstance(text, str) and text.strip() else "Error: AI server returned empty text."
         else:
             error_msg = f"API Error {response.status_code}"
             try:
@@ -95,9 +157,13 @@ def check_if_plant(image):
         response = requests.post(GEMINI_URL, headers={'Content-Type': 'application/json'}, data=json.dumps(payload), timeout=30)
         
         if response.status_code == 200:
-            result = response.json()['candidates'][0]['content']['parts'][0]['text'].strip().lower()
-            # Check if response indicates it's a plant
-            is_valid_plant = 'yes' in result or 'plant' in result or 'leaf' in result or 'crop' in result
+            data = response.json()
+            candidates = data.get("candidates") or []
+            text = ((candidates[0].get("content") or {}).get("parts") or [{}])[0].get("text", "") if candidates else ""
+            result = str(text).strip().lower()
+
+            # Prompt requests ONLY yes/no; be strict to avoid false positives.
+            is_valid_plant = result.startswith("yes")
             print(f"Gemini plant check result: {result} -> {is_valid_plant}")
             return is_valid_plant
         else:
@@ -116,13 +182,38 @@ def check_if_plant(image):
         return True  # Default to True if check fails, to not block legitimate requests
 
 def get_fertilizer_recommendation(plant_name, disease_name, is_healthy, lat, lon):
+    loc = "Pune, India"
+    if lat is not None and lon is not None:
+        loc = f"near latitude {lat:.4f}, longitude {lon:.4f} (use best-effort regional context)"
+
     if is_healthy:
-        prompt = f"""You are an expert agronomist in Pune, India. Provide a "Preventative Maintenance Guide" for a HEALTHY {plant_name} plant. 
-        Include: 1. Organic immunity booster w/ dosage. 2. NPK ratio. 3. Water/soil tip. Keep it brief (80 words), bullet points, NO bold text."""
+        prompt = (
+            f"You are an expert agronomist. The user is {loc}. "
+            f"Provide a 'Preventative Maintenance Guide' for a HEALTHY {plant_name} plant. "
+            "Include: 1) Organic immunity booster + exact dosage, 2) Suggested NPK ratio, 3) Water/soil tip. "
+            "Keep it brief (~80 words), bullet points, NO bold text."
+        )
     else:
-        prompt = f"""You are an expert agronomist in Pune, India. Provide a "Curative Treatment Plan" for {plant_name} with {disease_name}. 
-        Include: 1. Chemical/fungicide name (Indian trade names). 2. Exact dosage. 3. Recovery fertilizer. Keep it brief (80 words), bullet points, NO bold text."""
+        prompt = (
+            f"You are an expert agronomist. The user is {loc}. "
+            f"Provide a 'Curative Treatment Plan' for {plant_name} with {disease_name}. "
+            "Include: 1) Chemical/fungicide name (prefer India-available trade/common names) + exact dosage, "
+            "2) Application frequency, 3) Recovery fertilizer. "
+            "Keep it brief (~80 words), bullet points, NO bold text."
+        )
+
     return ask_gemini(prompt)
+
+
+def _allowed_image_filename(filename: str) -> bool:
+    _, ext = os.path.splitext(filename or "")
+    return ext.lower() in ALLOWED_IMAGE_EXTENSIONS
+
+
+def _format_class_for_display(class_name: str) -> str:
+    # Preserve dataset class naming (may include spaces), but make it human-readable.
+    name = (class_name or "").replace("___", " - ").replace("_", " ")
+    return " ".join(name.split()).strip()
 
 
 @app.route('/chat', methods=['POST'])
@@ -148,11 +239,27 @@ def chat_route():
 def predict_disease_route():
     if 'file' not in request.files: return jsonify({'error': 'No file part'}), 400
     file = request.files['file']
-    lat = request.form.get('lat')
-    lon = request.form.get('lon')
+    lat_raw = request.form.get('lat')
+    lon_raw = request.form.get('lon')
 
-    if file.filename == '': return jsonify({'error': 'No selected file'}), 400
-    if not disease_model: return jsonify({'error': 'Disease model is not loaded.'}), 500
+    if file.filename == '':
+        return jsonify({'error': 'No selected file'}), 400
+    if not _allowed_image_filename(file.filename):
+        return jsonify({'error': 'Unsupported file type. Please upload a JPG, PNG, or WebP image.'}), 400
+    if not disease_model:
+        return jsonify({'error': 'Disease model is not loaded.'}), 500
+    if not DISEASE_CLASS_NAMES:
+        return jsonify({'error': 'Class names are not configured (missing class_names.json).'}), 500
+
+    lat = None
+    lon = None
+    try:
+        if lat_raw is not None and lon_raw is not None:
+            lat = float(lat_raw)
+            lon = float(lon_raw)
+    except ValueError:
+        lat = None
+        lon = None
     
     try:
         # Read the file stream into memory
@@ -176,6 +283,8 @@ def predict_disease_route():
         img = img.resize((224, 224))
         img_array = np.array(img)
         img_array = np.expand_dims(img_array, axis=0)
+        if preprocess_input is None:
+            raise RuntimeError("TensorFlow/Keras preprocess_input is unavailable")
         img_array = preprocess_input(img_array)
         
         prediction = disease_model.predict(img_array)
@@ -183,7 +292,7 @@ def predict_disease_route():
         pred_class_name = DISEASE_CLASS_NAMES[pred_index]
         confidence = np.max(prediction[0]) * 100
         
-        display_name = pred_class_name.replace('___', ' - ').replace('_', ' ')
+        display_name = _format_class_for_display(pred_class_name)
         is_healthy = 'healthy' in pred_class_name.lower()
         plant_name = pred_class_name.split('___')[0]
         disease_name = display_name.split(' - ')[-1]
@@ -204,6 +313,23 @@ def predict_disease_route():
         return jsonify({'error': f'Analysis failed: {e}'}), 500
 
 
+@app.errorhandler(413)
+def request_entity_too_large(_):
+    return jsonify({'error': 'File too large. Please upload an image under the size limit.'}), 413
+
+
+@app.route('/healthz')
+def healthz():
+    return jsonify(
+        {
+            'status': 'ok',
+            'model_loaded': disease_model is not None,
+            'class_names_loaded': bool(DISEASE_CLASS_NAMES),
+            'gemini_configured': bool(GEMINI_API_KEY),
+        }
+    )
+
+
 @app.route('/')
 def home(): return render_template('index.html')
 @app.route('/scanner')
@@ -212,4 +338,7 @@ def scanner(): return render_template('vision_checker.html')
 def library(): return render_template('library.html')
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000, debug=True)
+    host = os.getenv("HOST", "0.0.0.0")
+    port = int(os.getenv("PORT", "5000"))
+    debug = os.getenv("FLASK_DEBUG", "0") == "1"
+    app.run(host=host, port=port, debug=debug)

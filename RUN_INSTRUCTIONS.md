@@ -36,6 +36,24 @@ Press CTRL+C to quit
 - **Disease Library**: http://localhost:5000/library
 - **AI Scanner**: http://localhost:5000/scanner
 
+## Health Check
+
+- **Health endpoint**: http://localhost:5000/healthz
+
+## Production Run (Recommended)
+
+Flask's built-in server is for development. For a more production-like run on Windows, use Waitress:
+
+1. Install deps:
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+2. Run the WSGI server:
+   ```bash
+   waitress-serve --listen=0.0.0.0:5000 wsgi:app
+   ```
+
 ## Tailwind CSS
 
 ✅ **Tailwind CSS is working!** All pages use the Tailwind CDN, so you need an internet connection for styling to load.

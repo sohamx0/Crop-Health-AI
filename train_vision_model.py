@@ -1,3 +1,10 @@
+"""Baseline CNN training script.
+
+Note:
+- This script trains a small custom CNN (not ResNet50).
+- For ResNet50 transfer learning + automatic `class_names.json`, use `train_resnet50_model.py`.
+"""
+
 import tensorflow as tf
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
 from tensorflow.keras.models import Sequential

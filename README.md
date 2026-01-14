@@ -8,6 +8,14 @@ An AI-driven web application for real-time crop disease detection and fertilizer
 This system detects plant diseases from leaf images using a **ResNet50 CNN model** and generates **actionable fertilizer recommendations** using the **Gemini Large Language Model (LLM)**.  
 It is designed to be lightweight, fast, and usable directly by farmers via a mobile-friendly web interface.
 
+## 📝 Brief Description
+
+**Crop Health Diagnosis & Fertilizer Recommendation System** is an intelligent agricultural solution that combines the power of deep learning computer vision with Google's advanced AI language models. The system enables farmers to instantly diagnose crop diseases by simply uploading a photo of a plant leaf. 
+
+Using a fine-tuned ResNet50 convolutional neural network, the application accurately identifies 38 different plant diseases across multiple crop types (tomatoes, apples, corn, grapes, etc.) with 97.86% accuracy. Once a disease is detected, Google's Gemini AI generates personalized, region-specific fertilizer recommendations and treatment plans in natural language, making expert agricultural advice accessible to farmers without requiring specialized knowledge.
+
+The solution is designed with privacy and simplicity in mind—no user accounts, no data storage, and all processing happens in-memory. The lightweight architecture ensures fast inference times (200-400ms) even on standard hardware, making it practical for real-world deployment in agricultural communities.
+
 ## 🚀 Features
 
 - Image-based plant disease detection (38 disease classes)
@@ -17,6 +25,7 @@ It is designed to be lightweight, fast, and usable directly by farmers via a mob
 - Flask-based REST API
 - No authentication, no database, no data storage
 - Privacy-first, in-memory image processing
+- Robust label mapping via `class_names.json`
 
 ## 🧠 Tech Stack
 
@@ -25,7 +34,7 @@ It is designed to be lightweight, fast, and usable directly by farmers via a mob
 - TensorFlow / Keras  
 - ResNet50 (Transfer Learning)  
 - Gemini LLM  
-- HTML, TailwindCSS, JavaScript  
+- HTML, TailwindCSS, JavaScript
 
 ## 🏗 System Architecture
 
@@ -34,6 +43,25 @@ It is designed to be lightweight, fast, and usable directly by farmers via a mob
 - **Model Layer**: Fine-tuned ResNet50 CNN
 
 No database or persistent storage is used.
+
+### Project Structure
+
+```
+Crop-Health-AI/
+├── app.py                      # Flask application & API endpoints
+├── class_names.json            # Class index → label mapping (must match model output order)
+├── plant_disease_model.h5      # Pre-trained ResNet50 model
+├── wsgi.py                     # Production entrypoint (Waitress)
+├── requirements.txt            # Python dependencies
+├── requirements-dev.txt        # Dev-only deps (tests)
+├── templates/                  # HTML templates
+│   ├── index.html             # Main UI
+│   ├── library.html           # Disease library
+│   └── vision_checker.html    # Vision checker page
+├── static/                     # Static assets (CSS, JS)
+├── assets/                     # Image assets
+└── .env                        # Environment variables (create this)
+```
 
 ## 🔬 Model Details
 
@@ -52,6 +80,18 @@ No database or persistent storage is used.
 | MobileNetV2    | 93.80%   |
 
 ResNet50 was selected for deployment due to accuracy–speed balance.
+
+## 🏋️ Training (Optional)
+
+This repo expects the model output index mapping to match `class_names.json`.
+
+- Train ResNet50 + write matching `class_names.json`:
+   ```bash
+   python train_resnet50_model.py
+   ```
+- Baseline custom CNN trainer (not ResNet50): `python train_vision_model.py`
+
+Note: model weights (`*.h5`) and the dataset folder are intentionally ignored by git via `.gitignore`.
 
 
 ## 🌾 Fertilizer Recommendation
@@ -73,20 +113,73 @@ ResNet50 was selected for deployment due to accuracy–speed balance.
 7. Image discarded from memory  
 
 
-## ⚙️ Installation & Run
+## ⚙️ Installation & Setup
 
-> Make sure Python 3.9+ is installed.
+### Prerequisites
+
+- Python 3.9 or higher
+- Gemini API key (for fertilizer recommendations)
+
+### Step 1: Clone the Repository
 
 ```bash
 git clone https://github.com/sohamx0/Crop-Health-AI.git
 cd Crop-Health-AI
+```
+
+### Step 2: Install Dependencies
+
+```bash
 pip install -r requirements.txt
+```
+
+### Step 3: Configure Gemini API Key
+
+1. Get your Gemini API key from [Google AI Studio](https://makersuite.google.com/app/apikey)
+2. Create a `.env` file in the root directory:
+   ```bash
+   GEMINI_API_KEY=your_actual_api_key_here
+   ```
+3. The `.env` file is already in `.gitignore`, so your API key won't be committed to GitHub.
+
+> **Note**: Disease detection will work without the API key, but fertilizer recommendations require it.
+
+### Step 4: Run the Application
+
+```bash
 python app.py
 ```
-Open in browser :
+
+The application will start on `http://127.0.0.1:5000/`
+
+Open in your browser:
 ```
 http://127.0.0.1:5000/
 ```
+## 📡 API Endpoints
+
+- `POST /predict_disease` - Upload image and get disease prediction + fertilizer recommendation
+- `GET /` - Main application interface
+- `GET /library` - Disease library with sample images
+- `GET /healthz` - Health check (model/class names/API key status)
+
+## 🔧 Configuration (Environment Variables)
+
+- `GEMINI_API_KEY` (optional): enables chat + image validation + fertilizer recommendations
+- `DISEASE_MODEL_PATH` (optional): defaults to `plant_disease_model.h5`
+- `CLASS_NAMES_PATH` (optional): defaults to `class_names.json`
+- `MAX_CONTENT_LENGTH` (optional): max upload size in bytes (default 8MB)
+- `FLASK_DEBUG` (optional): set to `1` for debug mode (default off)
+
+## 🏭 Production Run
+
+For a production-like server on Windows, use Waitress:
+
+```bash
+pip install -r requirements.txt
+waitress-serve --listen=0.0.0.0:5000 wsgi:app
+```
+
 ## 🛣 Future Scope
 
 - Weather & soil sensor integration
@@ -95,5 +188,14 @@ http://127.0.0.1:5000/
 - IoT-based monitoring
 - Region-specific retraining
 
+## 🤝 Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
+
 ## 📜 License
+
 MIT License
+
+## 👤 Author
+
+[sohamx0](https://github.com/sohamx0)
