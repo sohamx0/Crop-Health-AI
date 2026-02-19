@@ -16,17 +16,15 @@ except Exception as e:
     preprocess_input = None
     print(f"⚠️  Warning: TensorFlow/Keras not available: {e}")
 
-# Load environment variables from .env file
 try:
     from dotenv import load_dotenv
     load_dotenv()
 except ImportError:
-    pass  # python-dotenv not installed, skip
+    pass
 
 app = Flask(__name__, static_folder='assets', static_url_path='/assets')
 
-# Basic hardening / config
-app.config["MAX_CONTENT_LENGTH"] = int(os.getenv("MAX_CONTENT_LENGTH", str(8 * 1024 * 1024)))  # 8MB
+app.config["MAX_CONTENT_LENGTH"] = int(os.getenv("MAX_CONTENT_LENGTH", str(8 * 1024 * 1024)))
 ALLOWED_IMAGE_EXTENSIONS = {".jpg", ".jpeg", ".png", ".webp"}
 
 DISEASE_MODEL_PATH = os.getenv("DISEASE_MODEL_PATH", "plant_disease_model.h5")
@@ -34,7 +32,6 @@ CLASS_NAMES_PATH = os.getenv("CLASS_NAMES_PATH", "class_names.json")
 SKIP_MODEL_LOAD = os.getenv("SKIP_MODEL_LOAD", "0") == "1"
 
 
-# Load API key from environment variable
 GEMINI_API_KEY = os.getenv('GEMINI_API_KEY', '')
 if not GEMINI_API_KEY:
     print("⚠️  Warning: GEMINI_API_KEY not found in environment variables. Please set it in .env file")
@@ -126,18 +123,15 @@ def ask_gemini(prompt_text: str) -> str:
         return f"Error: {e}"
 
 def check_if_plant(image):
-    """Check if the image contains a valid plant using Gemini Vision API"""
     if not GEMINI_API_KEY or not GEMINI_URL:
         print("⚠️  Warning: GEMINI_API_KEY not set, skipping plant validation")
-        return True  # Allow through if API key not configured
+        return True
     
     try:
-        # Convert image to base64
         buffered = io.BytesIO()
         image.save(buffered, format="JPEG")
         img_base64 = base64.b64encode(buffered.getvalue()).decode('utf-8')
         
-        # Prepare payload for Gemini Vision API
         payload = {
             "contents": [{
                 "parts": [
@@ -161,8 +155,6 @@ def check_if_plant(image):
             candidates = data.get("candidates") or []
             text = ((candidates[0].get("content") or {}).get("parts") or [{}])[0].get("text", "") if candidates else ""
             result = str(text).strip().lower()
-
-            # Prompt requests ONLY yes/no; be strict to avoid false positives.
             is_valid_plant = result.startswith("yes")
             print(f"Gemini plant check result: {result} -> {is_valid_plant}")
             return is_valid_plant
@@ -174,12 +166,12 @@ def check_if_plant(image):
             except:
                 pass
             print(f"Gemini API error: {response.status_code} - {error_detail}")
-            return True  # Default to True if API fails, to not block legitimate requests
+            return True
     except Exception as e:
         print(f"Error checking if plant: {e}")
         import traceback
         traceback.print_exc()
-        return True  # Default to True if check fails, to not block legitimate requests
+        return True
 
 def get_fertilizer_recommendation(plant_name, disease_name, is_healthy, lat, lon):
     loc = "Pune, India"
@@ -211,7 +203,6 @@ def _allowed_image_filename(filename: str) -> bool:
 
 
 def _format_class_for_display(class_name: str) -> str:
-    # Preserve dataset class naming (may include spaces), but make it human-readable.
     name = (class_name or "").replace("___", " - ").replace("_", " ")
     return " ".join(name.split()).strip()
 
@@ -262,11 +253,9 @@ def predict_disease_route():
         lon = None
     
     try:
-        # Read the file stream into memory
-        file.stream.seek(0)  # Reset stream position
+        file.stream.seek(0)
         img = Image.open(file.stream).convert('RGB')
-        
-        # First, check with Gemini if it's a valid plant
+
         is_plant = check_if_plant(img.copy())
         
         if not is_plant:
@@ -279,7 +268,6 @@ def predict_disease_route():
                 'not_plant': True
             })
         
-        # If it's a plant, proceed with model prediction
         img = img.resize((224, 224))
         img_array = np.array(img)
         img_array = np.expand_dims(img_array, axis=0)

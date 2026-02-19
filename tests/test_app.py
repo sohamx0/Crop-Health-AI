@@ -1,6 +1,5 @@
 import os
 
-# Keep tests fast and independent from the heavy TF model load.
 os.environ.setdefault("SKIP_MODEL_LOAD", "1")
 
 import io
@@ -43,7 +42,6 @@ def test_predict_rejects_missing_file():
 
 
 def test_predict_works_with_fake_model(monkeypatch):
-    # Ensure class names exist and align with fake output
     monkeypatch.setattr(app_module, "DISEASE_CLASS_NAMES", [f"Class___{i}" for i in range(38)])
     monkeypatch.setattr(app_module, "disease_model", _FakeModel())
     monkeypatch.setattr(app_module, "preprocess_input", lambda x: x)

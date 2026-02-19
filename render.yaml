@@ -1,0 +1,17 @@
+services:
+  - type: web
+    name: crop-health-ai
+    env: python
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn --bind 0.0.0.0:$PORT wsgi:app
+    autoDeploy: true
+    envVars:
+      - key: GEMINI_API_KEY
+        sync: false
+      - key: DISEASE_MODEL_PATH
+        value: plant_disease_model.h5
+      - key: CLASS_NAMES_PATH
+        value: class_names.json
+      - key: MAX_CONTENT_LENGTH
+        value: "8388608"

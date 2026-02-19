@@ -6,7 +6,6 @@ Run this to check what's wrong: python test_ai.py
 import os
 import sys
 
-# Fix encoding for Windows console
 if sys.platform == 'win32':
     import codecs
     sys.stdout = codecs.getwriter('utf-8')(sys.stdout.buffer, 'strict')
@@ -16,7 +15,6 @@ print("=" * 50)
 print("CropHealth AI - Diagnostic Test")
 print("=" * 50)
 
-# Check 1: Environment variables
 print("\n1. Checking environment variables...")
 try:
     from dotenv import load_dotenv
@@ -32,7 +30,6 @@ else:
     print("   ❌ GEMINI_API_KEY not found!")
     print("   → Create a .env file with: GEMINI_API_KEY=your_key_here")
 
-# Check 2: Required packages
 print("\n2. Checking Python packages...")
 packages = {
     'flask': 'Flask',
@@ -51,7 +48,6 @@ for module, name in packages.items():
         print(f"   ❌ {name} NOT installed")
         print(f"      → Run: pip install {name.lower()}")
 
-# Check 3: Model file
 print("\n3. Checking model file...")
 if os.path.exists('plant_disease_model.h5'):
     size_mb = os.path.getsize('plant_disease_model.h5') / (1024 * 1024)
@@ -60,7 +56,6 @@ else:
     print("   ❌ plant_disease_model.h5 NOT found!")
     print("   → You need to train the model or download it")
 
-# Check 4: Test Gemini API (if key exists)
 if GEMINI_API_KEY:
     print("\n4. Testing Gemini API connection...")
     try:

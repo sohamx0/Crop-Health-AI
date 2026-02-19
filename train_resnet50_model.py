@@ -69,7 +69,6 @@ def train_resnet50_model():
     num_classes = len(train_gen.class_indices)
     print(f"Found {train_gen.samples} train images across {num_classes} classes")
 
-    # Persist class index order used by the generator/model
     index_to_class = {index: name for name, index in train_gen.class_indices.items()}
     class_names = [index_to_class[i] for i in range(num_classes)]
 

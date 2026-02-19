@@ -54,6 +54,20 @@ Flask's built-in server is for development. For a more production-like run on Wi
    waitress-serve --listen=0.0.0.0:5000 wsgi:app
    ```
 
+   ## Deploy to Render (Recommended)
+
+   Render is a good fit for this app because it runs a persistent Python web service and can handle the TensorFlow model.
+
+   1. Push this repo to GitHub.
+   2. In Render, create a **New Web Service** from the repo.
+   3. Render uses the included `render.yaml` with:
+      - Build: `pip install -r requirements.txt`
+      - Start: `gunicorn wsgi:app`
+   4. Set `GEMINI_API_KEY` in Render env vars.
+   5. Deploy.
+
+   If you move the model or class names file, set `DISEASE_MODEL_PATH` and `CLASS_NAMES_PATH` accordingly.
+
 ## Tailwind CSS
 
 ✅ **Tailwind CSS is working!** All pages use the Tailwind CDN, so you need an internet connection for styling to load.

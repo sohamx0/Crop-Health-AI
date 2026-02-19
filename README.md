@@ -180,6 +180,22 @@ pip install -r requirements.txt
 waitress-serve --listen=0.0.0.0:5000 wsgi:app
 ```
 
+## ☁️ Deploy to Render (Recommended)
+
+Render supports long-running Python web services, which is a better fit than serverless for a TensorFlow model.
+
+1. Push this repo to GitHub.
+2. In Render, create a **New Web Service** and select the repo.
+3. Render will read the included `render.yaml` and set:
+   - Build: `pip install -r requirements.txt`
+   - Start: `gunicorn wsgi:app`
+4. Add the environment variable `GEMINI_API_KEY` in Render.
+5. Deploy.
+
+Notes:
+- Ensure `plant_disease_model.h5` and `class_names.json` are present in the repo or uploaded via Render's disk.
+- If you change model paths, update `DISEASE_MODEL_PATH` and `CLASS_NAMES_PATH` in Render env vars.
+
 ## 🛣 Future Scope
 
 - Weather & soil sensor integration
