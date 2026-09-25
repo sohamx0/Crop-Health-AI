@@ -1,14 +1,14 @@
-# 🌱 Crop Health Diagnosis & Fertilizer Recommendation System
+# Crop Health Diagnosis & Fertilizer Recommendation System
 
 An AI-driven web application for real-time crop disease detection and fertilizer recommendations using deep learning and large language models.
 
 
-## 📌 Overview
+##  Overview
 
 This system detects plant diseases from leaf images using a **ResNet50 CNN model** and generates **actionable fertilizer recommendations** using the **Gemini Large Language Model (LLM)**.  
 It is designed to be lightweight, fast, and usable directly by farmers via a mobile-friendly web interface.
 
-## 📝 Brief Description
+##  Brief Description
 
 **Crop Health Diagnosis & Fertilizer Recommendation System** is an intelligent agricultural solution that combines the power of deep learning computer vision with Google's advanced AI language models. The system enables farmers to instantly diagnose crop diseases by simply uploading a photo of a plant leaf. 
 
@@ -16,7 +16,7 @@ Using a fine-tuned ResNet50 convolutional neural network, the application accura
 
 The solution is designed with privacy and simplicity in mind—no user accounts, no data storage, and all processing happens in-memory. The lightweight architecture ensures fast inference times (200-400ms) even on standard hardware, making it practical for real-world deployment in agricultural communities.
 
-## 🚀 Features
+##  Features
 
 - Image-based plant disease detection (38 disease classes)
 - Deep Learning using ResNet50 (TensorFlow/Keras)
@@ -27,7 +27,7 @@ The solution is designed with privacy and simplicity in mind—no user accounts,
 - Privacy-first, in-memory image processing
 - Robust label mapping via `class_names.json`
 
-## 🧠 Tech Stack
+## Tech Stack
 
 - Python  
 - Flask  
@@ -36,7 +36,7 @@ The solution is designed with privacy and simplicity in mind—no user accounts,
 - Gemini LLM  
 - HTML, TailwindCSS, JavaScript
 
-## 🏗 System Architecture
+##  System Architecture
 
 - **Client**: Image upload + result display (Web UI)
 - **Backend**: Flask API for preprocessing, inference & LLM calls
@@ -63,7 +63,7 @@ Crop-Health-AI/
 └── .env                        # Environment variables (create this)
 ```
 
-## 🔬 Model Details
+##  Model Details
 
 - Dataset: PlantVillage
 - Input size: 224 × 224
@@ -81,7 +81,7 @@ Crop-Health-AI/
 
 ResNet50 was selected for deployment due to accuracy–speed balance.
 
-## 🏋️ Training (Optional)
+##  Training (Optional)
 
 This repo expects the model output index mapping to match `class_names.json`.
 
@@ -94,7 +94,7 @@ This repo expects the model output index mapping to match `class_names.json`.
 Note: model weights (`*.h5`) and the dataset folder are intentionally ignored by git via `.gitignore`.
 
 
-## 🌾 Fertilizer Recommendation
+##  Fertilizer Recommendation
 
 - Generated using Gemini LLM
 - Input: Crop type + predicted disease
@@ -102,7 +102,7 @@ Note: model weights (`*.h5`) and the dataset folder are intentionally ignored by
 - Human-readable, no rule-based logic
 
 
-## 🔁 Workflow
+## Workflow
 
 1. User uploads a leaf image  
 2. Image sent to `/predict_disease` endpoint  
@@ -113,7 +113,7 @@ Note: model weights (`*.h5`) and the dataset folder are intentionally ignored by
 7. Image discarded from memory  
 
 
-## ⚙️ Installation & Setup
+##  Installation & Setup
 
 ### Prerequisites
 
@@ -156,47 +156,16 @@ Open in your browser:
 ```
 http://127.0.0.1:5000/
 ```
-## 📡 API Endpoints
+## API Endpoints
 
 - `POST /predict_disease` - Upload image and get disease prediction + fertilizer recommendation
 - `GET /` - Main application interface
 - `GET /library` - Disease library with sample images
 - `GET /healthz` - Health check (model/class names/API key status)
 
-## 🔧 Configuration (Environment Variables)
 
-- `GEMINI_API_KEY` (optional): enables chat + image validation + fertilizer recommendations
-- `DISEASE_MODEL_PATH` (optional): defaults to `plant_disease_model.h5`
-- `CLASS_NAMES_PATH` (optional): defaults to `class_names.json`
-- `MAX_CONTENT_LENGTH` (optional): max upload size in bytes (default 8MB)
-- `FLASK_DEBUG` (optional): set to `1` for debug mode (default off)
 
-## 🏭 Production Run
-
-For a production-like server on Windows, use Waitress:
-
-```bash
-pip install -r requirements.txt
-waitress-serve --listen=0.0.0.0:5000 wsgi:app
-```
-
-## ☁️ Deploy to Render (Recommended)
-
-Render supports long-running Python web services, which is a better fit than serverless for a TensorFlow model.
-
-1. Push this repo to GitHub.
-2. In Render, create a **New Web Service** and select the repo.
-3. Render will read the included `render.yaml` and set:
-   - Build: `pip install -r requirements.txt`
-   - Start: `gunicorn wsgi:app`
-4. Add the environment variable `GEMINI_API_KEY` in Render.
-5. Deploy.
-
-Notes:
-- Ensure `plant_disease_model.h5` and `class_names.json` are present in the repo or uploaded via Render's disk.
-- If you change model paths, update `DISEASE_MODEL_PATH` and `CLASS_NAMES_PATH` in Render env vars.
-
-## 🛣 Future Scope
+##  Future Scope
 
 - Weather & soil sensor integration
 - Offline inference mode
@@ -204,11 +173,11 @@ Notes:
 - IoT-based monitoring
 - Region-specific retraining
 
-## 🤝 Contributing
+##  Contributing
 
 Contributions are welcome! Please feel free to submit a Pull Request.
 
-## 📜 License
+## License
 
 MIT License
 
