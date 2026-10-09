@@ -367,8 +367,19 @@
         
         try {
             const res = await fetch('/predict_disease', { method: 'POST', body: formData });
-            if (!res.ok) throw new Error((await res.json()).error);
-            displayResult(await res.json());
+            if (!res.ok) {
+                let errMessage = `Server error (${res.status})`;
+                try {
+                    const errorData = await res.json();
+                    if (errorData && errorData.error) errMessage = errorData.error;
+                } catch (parseError) {
+                    errMessage = `Server error: ${res.statusText} (${res.status}). The service might be waking up or overloaded.`;
+                }
+                throw new Error(errMessage);
+            }
+            
+            const data = await res.json();
+            displayResult(data);
         } catch (e) { displayError(e.message); }
     }
     
