@@ -9,8 +9,13 @@ import io
 from typing import Any, Optional
 
 try:
+    import tensorflow as tf
     from tensorflow.keras.models import load_model
     from tensorflow.keras.applications.resnet50 import preprocess_input
+    
+    # Restrict TensorFlow threads to reduce memory overhead on CPU
+    tf.config.threading.set_inter_op_parallelism_threads(1)
+    tf.config.threading.set_intra_op_parallelism_threads(1)
 except Exception as e:
     load_model = None
     preprocess_input = None
