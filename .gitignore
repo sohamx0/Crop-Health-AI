@@ -43,7 +43,6 @@ package-lock.json
 
 # --- Large AI Models & Weights ---
 # (These are too big for GitHub - users should train or download separately)
-*.h5
 *.hdf5
 *.pkl
 *.joblib
